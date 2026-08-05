@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edinsured Treaty Lab</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -46,12 +47,12 @@
     <h3>Treaty Structure</h3>
 
     <label>Retention ($)</label>
-    <input type="number" placeholder="1000000">
+    <input id="retention" type="number" placeholder="1000000">
 
     <br><br>
 
     <label>Limit ($)</label>
-    <input type="number" placeholder="5000000">
+    <input id="limit" type="number" placeholder="5000000">
 
 
     <hr>
@@ -60,14 +61,14 @@
     <h3>Simulation Settings</h3>
 
     <label>Number of Simulations</label>
-    <input type="number" placeholder="10000">
+    <input id="simulations" type="number" placeholder="10000">
 
     <br><br>
 
-    <button>
-        RUN SIMULATION
-    </button>
-
+    <button onclick="runSimulation()">
+RUN SIMULATION
+</button>
+<script src="script.js"></script>
 
 </body>
 
