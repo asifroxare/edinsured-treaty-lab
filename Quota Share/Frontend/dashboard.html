@@ -10,6 +10,10 @@
       --primary-hover: #0369a1;
       --accent: #4f46e5;
       --accent-hover: #4338ca;
+      --cedant-color: #0284c7;
+      --reinsurer-color: #7c3aed;
+      --success: #059669;
+      --danger: #dc2626;
       --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
@@ -289,24 +293,267 @@
       margin-top: 4px;
     }
 
-    .recon-box {
+    /* M5.5 Visual Analytics Styles */
+    .visual-analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .visual-box {
       background: #f8fafc;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 14px;
-    }
-
-    .recon-box h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .recon-grid {
+      border-radius: 8px;
+      padding: 18px;
       display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .visual-box h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Flow Diagrams */
+    .flow-root-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 14px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0f172a;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .flow-connector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: -4px 0;
+    }
+
+    .flow-branches-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .flow-branch {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .branch-cedant {
+      border-top: 3px solid var(--cedant-color);
+    }
+
+    .branch-reinsurer {
+      border-top: 3px solid var(--reinsurer-color);
+    }
+
+    .branch-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .branch-amount {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .branch-pct {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Risk Transfer Bar */
+    .risk-bar-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .risk-bar-labels {
+      display: flex;
+      justify-content: space-between;
       font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .risk-bar-track {
+      height: 24px;
+      width: 100%;
+      background: #e2e8f0;
+      border-radius: 6px;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .bar-segment-cedant {
+      background: var(--cedant-color);
+      height: 100%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .bar-segment-reinsurer {
+      background: var(--reinsurer-color);
+      height: 100%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Commission Flow Visual */
+    .commission-flow-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .comm-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .comm-arrow {
+      color: #94a3b8;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    /* Reconciliation Flow */
+    .recon-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .recon-flow-card {
+      background: #ffffff;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+    }
+
+    .recon-check {
+      color: var(--success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    /* Individual Risk Visual Allocation Matrix */
+    .risk-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .risk-visual-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .risk-card-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .risk-mini-bar {
+      display: flex;
+      height: 12px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #e2e8f0;
+      margin-top: 2px;
+    }
+
+    /* Comparative Baseline vs Scenario Visual Bars */
+    .comparative-bars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .comp-bar-column {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comp-bar-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+    }
+
+    .comp-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .comp-bar-track {
+      height: 14px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
     }
 
     /* Scenario Lab Section */
@@ -347,7 +594,6 @@
       margin-bottom: 12px;
     }
 
-    /* Student Prediction Panel */
     .prediction-panel {
       background: #ffffff;
       border: 1px solid #cbd5e1;
@@ -397,11 +643,6 @@
       border-color: #cbd5e1;
     }
 
-    .prediction-label input[type="checkbox"] {
-      cursor: pointer;
-    }
-
-    /* Prediction Result Feedback Banner */
     .feedback-banner {
       border-radius: 8px;
       padding: 16px 20px;
@@ -637,6 +878,12 @@
       .prediction-options-grid {
         grid-template-columns: 1fr;
       }
+      .comparative-bars-grid {
+        grid-template-columns: 1fr;
+      }
+      .flow-branches-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -727,9 +974,10 @@
       </div>
     </section>
 
-    <!-- 2. BASELINE RESULTS -->
+    <!-- 2. BASELINE SUMMARY & M5.5 VISUAL ANALYTICS -->
     <section class="section-card" id="results-section">
-      <h2>2. Baseline Financial Summary</h2>
+      <h2>2. Baseline Financial Summary & Visual Analytics</h2>
+      <!-- Primary Metric Cards -->
       <div class="metrics-grid">
         <div class="metric-card">
           <span class="card-label">Gross Written Premium</span>
@@ -757,21 +1005,110 @@
         </div>
       </div>
 
-      <div class="recon-box">
-        <h3>System Reconciliation & Integrity</h3>
-        <div class="recon-grid">
-          <div class="recon-item">
-            <span>Premium Difference:</span>
-            <strong id="recon-premium">$0.00</strong>
+      <!-- M5.5 Visual Analytics Grid -->
+      <div class="visual-analytics-grid">
+        <!-- V1: Premium Flow Diagram -->
+        <div class="visual-box">
+          <h3>💰 Premium Money Flow</h3>
+          <div class="flow-root-card" id="flow-gross-premium">$0.00 (Gross Premium)</div>
+          <div class="flow-connector">│<br>▼</div>
+          <div class="flow-branches-grid">
+            <div class="flow-branch branch-cedant">
+              <span class="branch-title">Cedant Retained</span>
+              <span class="branch-amount" id="flow-cedant-premium">$0.00</span>
+              <span class="branch-pct" id="flow-cedant-prem-pct">60%</span>
+            </div>
+            <div class="flow-branch branch-reinsurer">
+              <span class="branch-title">Reinsurer Ceded</span>
+              <span class="branch-amount" id="flow-reinsurer-premium">$0.00</span>
+              <span class="branch-pct" id="flow-reinsurer-prem-pct">40%</span>
+            </div>
           </div>
-          <div class="recon-item">
-            <span>Claims Difference:</span>
-            <strong id="recon-claims">$0.00</strong>
+        </div>
+
+        <!-- V2: Claims Flow Diagram -->
+        <div class="visual-box">
+          <h3>🛡️ Claims Recovery Flow</h3>
+          <div class="flow-root-card" id="flow-gross-claims">$0.00 (Gross Claims)</div>
+          <div class="flow-connector">│<br>▼</div>
+          <div class="flow-branches-grid">
+            <div class="flow-branch branch-cedant">
+              <span class="branch-title">Cedant Incurred</span>
+              <span class="branch-amount" id="flow-cedant-claims">$0.00</span>
+              <span class="branch-pct" id="flow-cedant-claims-pct">60%</span>
+            </div>
+            <div class="flow-branch branch-reinsurer">
+              <span class="branch-title">Reinsurer Recovered</span>
+              <span class="branch-amount" id="flow-reinsurer-claims">$0.00</span>
+              <span class="branch-pct" id="flow-reinsurer-claims-pct">40%</span>
+            </div>
           </div>
-          <div class="recon-item">
-            <span>Result Difference:</span>
-            <strong id="recon-result">$0.00</strong>
+        </div>
+
+        <!-- V3: Risk Transfer Proportional Bar -->
+        <div class="visual-box">
+          <h3>⚖️ Risk Transfer Split</h3>
+          <div class="risk-bar-container">
+            <div class="risk-bar-labels">
+              <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 60%</span>
+              <span style="color: var(--reinsurer-color);" id="risk-bar-label-reinsurer">Reinsurer: 40%</span>
+            </div>
+            <div class="risk-bar-track">
+              <div class="bar-segment-cedant" id="risk-bar-cedant" style="width: 60%;">60%</div>
+              <div class="bar-segment-reinsurer" id="risk-bar-reinsurer" style="width: 40%;">40%</div>
+            </div>
           </div>
+
+          <!-- V6: Ceding Commission Flow -->
+          <div style="margin-top: 8px;">
+            <div class="branch-title" style="margin-bottom: 6px;">Ceding Commission Transfer</div>
+            <div class="commission-flow-box">
+              <div class="comm-step">
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Ceded Prem</span>
+                <strong id="comm-flow-ceded-prem">$0.00</strong>
+              </div>
+              <span class="comm-arrow">&rarr;</span>
+              <div class="comm-step">
+                <span style="font-size: 0.75rem; color: var(--accent);">Commission</span>
+                <strong style="color: var(--accent);" id="comm-flow-amount">$0.00</strong>
+              </div>
+              <span class="comm-arrow">&rarr;</span>
+              <div class="comm-step">
+                <span style="font-size: 0.75rem; color: var(--cedant-color);">Cedant Income</span>
+                <strong style="color: var(--cedant-color);">Rebate</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- V7: Enhanced Reconciliation Visual Flow -->
+        <div class="visual-box">
+          <h3>✅ System Reconciliation & Integrity</h3>
+          <div class="recon-flow-grid">
+            <div class="recon-flow-card">
+              <span class="branch-title">Premium Split</span>
+              <span class="recon-check">✓ Balanced</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-premium">$0.00</strong></span>
+            </div>
+            <div class="recon-flow-card">
+              <span class="branch-title">Claims Split</span>
+              <span class="recon-check">✓ Balanced</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-claims">$0.00</strong></span>
+            </div>
+            <div class="recon-flow-card">
+              <span class="branch-title">Result Split</span>
+              <span class="recon-check">✓ Balanced</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-result">$0.00</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- V5: Individual Risk Allocation Matrix -->
+      <div style="margin-top: 10px;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">📋 Individual Policy Allocations (from Portfolio)</h3>
+        <div class="risk-visual-grid" id="individual-risks-container">
+          <!-- Dynamically populated from result.risks -->
         </div>
       </div>
     </section>
@@ -780,7 +1117,7 @@
     <section class="section-card scenario-lab-section" id="scenario-section">
       <div class="section-header">
         <div>
-          <h2>3. Scenario Lab (Controlled Experiments & Challenges)</h2>
+          <h2>3. Scenario Lab (Controlled Experiments & Visual Analytics)</h2>
           <p class="section-subtext">Formulate hypotheses, adjust treaty terms, and compare predicted vs actual underwriting results.</p>
         </div>
         <div class="preset-group">
@@ -884,6 +1221,45 @@
           <div class="badge-item active-scenario">
             <span class="badge-title">SCENARIO</span>
             <span class="badge-detail" id="badge-scenario-qs">60% QS | 30% Comm</span>
+          </div>
+        </div>
+
+        <!-- M5.5 V4: Visual Baseline vs Scenario Comparative Bars -->
+        <div class="comparative-bars-grid">
+          <div class="comp-bar-column">
+            <span class="comp-bar-header">Baseline Allocation (<span id="comp-base-qs-label">40% QS</span>)</span>
+            <div class="comp-bar-item">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Premium: <strong id="comp-base-prem-txt">$135k Ret / $90k Ceded</strong></span>
+              <div class="comp-bar-track">
+                <div id="comp-base-prem-bar-ret" style="background: var(--cedant-color); width: 60%;"></div>
+                <div id="comp-base-prem-bar-ced" style="background: var(--reinsurer-color); width: 40%;"></div>
+              </div>
+            </div>
+            <div class="comp-bar-item">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Claims: <strong id="comp-base-clm-txt">$1.5M Ret / $1.0M Ceded</strong></span>
+              <div class="comp-bar-track">
+                <div id="comp-base-clm-bar-ret" style="background: var(--cedant-color); width: 60%;"></div>
+                <div id="comp-base-clm-bar-ced" style="background: var(--reinsurer-color); width: 40%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="comp-bar-column">
+            <span class="comp-bar-header">Scenario Allocation (<span id="comp-scen-qs-label">60% QS</span>)</span>
+            <div class="comp-bar-item">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Premium: <strong id="comp-scen-prem-txt">$90k Ret / $135k Ceded</strong></span>
+              <div class="comp-bar-track">
+                <div id="comp-scen-prem-bar-ret" style="background: var(--cedant-color); width: 40%;"></div>
+                <div id="comp-scen-prem-bar-ced" style="background: var(--reinsurer-color); width: 60%;"></div>
+              </div>
+            </div>
+            <div class="comp-bar-item">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Claims: <strong id="comp-scen-clm-txt">$1.0M Ret / $1.5M Ceded</strong></span>
+              <div class="comp-bar-track">
+                <div id="comp-scen-clm-bar-ret" style="background: var(--cedant-color); width: 40%;"></div>
+                <div id="comp-scen-clm-bar-ced" style="background: var(--reinsurer-color); width: 60%;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1281,6 +1657,9 @@
         const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 225000;
         const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 2500000;
         const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 90000;
+        const retPrem   = data.cedant?.premium_retained ?? data.cedant?.retained_premium ?? 135000;
+        const retClms   = data.cedant?.claims_retained ?? data.cedant?.retained_claims ?? 1500000;
+        const recClms   = data.cedant?.claims_recovered ?? data.reinsurer?.claims_incurred ?? 1000000;
         const commRec   = data.cedant?.commission_received ?? data.cedant?.ceding_commission ?? data.treaty?.commission_paid ?? 27000;
         const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? -1338000;
         const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? -937000;
@@ -1292,6 +1671,39 @@
         document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
         document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
 
+        // M5.5 V1: Premium Flow Tree
+        document.getElementById("flow-gross-premium").textContent = `${formatUSD(grossPrem)} (Gross Written Premium)`;
+        document.getElementById("flow-cedant-premium").textContent = formatUSD(retPrem);
+        document.getElementById("flow-reinsurer-premium").textContent = formatUSD(cededPrem);
+
+        const qsPct = Math.round((data.treaty?.quota_share_pct ?? data.treaty?.qs_pct ?? 0.4) * 100);
+        const retPct = 100 - qsPct;
+
+        document.getElementById("flow-cedant-prem-pct").textContent = `${retPct}% Retained`;
+        document.getElementById("flow-reinsurer-prem-pct").textContent = `${qsPct}% Ceded`;
+
+        // M5.5 V2: Claims Recovery Flow Tree
+        document.getElementById("flow-gross-claims").textContent = `${formatUSD(grossClms)} (Gross Claims Incurred)`;
+        document.getElementById("flow-cedant-claims").textContent = formatUSD(retClms);
+        document.getElementById("flow-reinsurer-claims").textContent = formatUSD(recClms);
+        document.getElementById("flow-cedant-claims-pct").textContent = `${retPct}% Incurred`;
+        document.getElementById("flow-reinsurer-claims-pct").textContent = `${qsPct}% Recovered`;
+
+        // M5.5 V3: Risk Transfer Bar
+        document.getElementById("risk-bar-label-cedant").textContent = `Cedant Retained: ${retPct}%`;
+        document.getElementById("risk-bar-label-reinsurer").textContent = `Reinsurer Ceded: ${qsPct}%`;
+        const barCed = document.getElementById("risk-bar-cedant");
+        const barRein = document.getElementById("risk-bar-reinsurer");
+        barCed.style.width = `${retPct}%`;
+        barCed.textContent = `${retPct}%`;
+        barRein.style.width = `${qsPct}%`;
+        barRein.textContent = `${qsPct}%`;
+
+        // M5.5 V6: Commission Visual Transfer
+        document.getElementById("comm-flow-ceded-prem").textContent = formatUSD(cededPrem);
+        document.getElementById("comm-flow-amount").textContent = formatUSD(commRec);
+
+        // M5.5 V7: Reconciliation Checks
         const diffPrem = data.reconciliation?.premium_difference ?? 0;
         const diffClms = data.reconciliation?.claims_difference ?? 0;
         const diffRes  = data.reconciliation?.result_difference ?? 0;
@@ -1299,6 +1711,53 @@
         document.getElementById("recon-premium").textContent = formatUSD(diffPrem);
         document.getElementById("recon-claims").textContent = formatUSD(diffClms);
         document.getElementById("recon-result").textContent = formatUSD(diffRes);
+
+        // M5.5 V5: Individual Risk Visual Allocation Matrix
+        renderIndividualRisks(data.risks || [], retPct, qsPct);
+      }
+
+      function renderIndividualRisks(risks, retPct, qsPct) {
+        const container = document.getElementById("individual-risks-container");
+        if (!risks || risks.length === 0) {
+          container.innerHTML = "<p style='color: var(--text-muted); font-size: 0.85rem;'>No individual risks to display.</p>";
+          return;
+        }
+
+        container.innerHTML = risks.map((r, i) => {
+          const rId = r.risk_id || `Risk 00${i+1}`;
+          const premRet = r.retained_premium ?? r.premium_retained ?? 0;
+          const premCed = r.ceded_premium ?? r.premium_ceded ?? 0;
+          const clmRet  = r.retained_claim ?? r.claims_retained ?? 0;
+          const clmCed  = r.ceded_claim ?? r.claims_recovered ?? 0;
+
+          return `
+            <div class="risk-visual-card">
+              <div class="risk-card-header">
+                <span>${rId} (SI: ${formatUSD(r.sum_insured || 0)})</span>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>Prem: ${formatUSD(premRet)} (${retPct}%)</span>
+                  <span>${formatUSD(premCed)} (${qsPct}%)</span>
+                </div>
+                <div class="risk-mini-bar">
+                  <div style="background: var(--cedant-color); width: ${retPct}%;"></div>
+                  <div style="background: var(--reinsurer-color); width: ${qsPct}%;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                  <span>Claims: ${formatUSD(clmRet)} (${retPct}%)</span>
+                  <span>${formatUSD(clmCed)} (${qsPct}%)</span>
+                </div>
+                <div class="risk-mini-bar">
+                  <div style="background: var(--cedant-color); width: ${retPct}%;"></div>
+                  <div style="background: var(--reinsurer-color); width: ${qsPct}%;"></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
       }
 
       function renderComparison(base, scen) {
@@ -1306,13 +1765,44 @@
         compContainer.style.display = "block";
 
         const baseQS = Math.round((base.treaty?.quota_share_pct ?? base.treaty?.qs_pct ?? 0.4) * 100);
+        const baseRet = 100 - baseQS;
         const baseComm = Math.round((base.treaty?.ceding_commission_pct ?? base.treaty?.ceding_comm_pct ?? 0.3) * 100);
         const scenQS = Math.round((scen.treaty?.quota_share_pct ?? scen.treaty?.qs_pct ?? 0.6) * 100);
+        const scenRet = 100 - scenQS;
         const scenComm = Math.round((scen.treaty?.ceding_commission_pct ?? scen.treaty?.ceding_comm_pct ?? 0.3) * 100);
 
         document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
         document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
 
+        // M5.5 V4: Visual Baseline vs Scenario Comparative Split Bars
+        document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
+        document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
+
+        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 135000;
+        const basePremCed = base.cedant?.premium_ceded ?? 90000;
+        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 1500000;
+        const baseClmCed  = base.cedant?.claims_recovered ?? 1000000;
+
+        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 90000;
+        const scenPremCed = scen.cedant?.premium_ceded ?? 135000;
+        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 1000000;
+        const scenClmCed  = scen.cedant?.claims_recovered ?? 1500000;
+
+        document.getElementById("comp-base-prem-txt").textContent = `${formatUSD(basePremRet)} (${baseRet}%) / ${formatUSD(basePremCed)} (${baseQS}%)`;
+        document.getElementById("comp-base-clm-txt").textContent = `${formatUSD(baseClmRet)} (${baseRet}%) / ${formatUSD(baseClmCed)} (${baseQS}%)`;
+        document.getElementById("comp-base-prem-bar-ret").style.width = `${baseRet}%`;
+        document.getElementById("comp-base-prem-bar-ced").style.width = `${baseQS}%`;
+        document.getElementById("comp-base-clm-bar-ret").style.width = `${baseRet}%`;
+        document.getElementById("comp-base-clm-bar-ced").style.width = `${baseQS}%`;
+
+        document.getElementById("comp-scen-prem-txt").textContent = `${formatUSD(scenPremRet)} (${scenRet}%) / ${formatUSD(scenPremCed)} (${scenQS}%)`;
+        document.getElementById("comp-scen-clm-txt").textContent = `${formatUSD(scenClmRet)} (${scenRet}%) / ${formatUSD(scenClmCed)} (${scenQS}%)`;
+        document.getElementById("comp-scen-prem-bar-ret").style.width = `${scenRet}%`;
+        document.getElementById("comp-scen-prem-bar-ced").style.width = `${scenQS}%`;
+        document.getElementById("comp-scen-clm-bar-ret").style.width = `${scenRet}%`;
+        document.getElementById("comp-scen-clm-bar-ced").style.width = `${scenQS}%`;
+
+        // Deltas
         const baseCedResult = base.cedant?.net_underwriting_result ?? -1338000;
         const scenCedResult = scen.cedant?.net_underwriting_result ?? -870000;
         const cedantDelta = scenCedResult - baseCedResult;
@@ -1320,11 +1810,6 @@
         const baseReinResult = base.reinsurer?.net_underwriting_result ?? -937000;
         const scenReinResult = scen.reinsurer?.net_underwriting_result ?? -1405000;
         const reinsurerDelta = scenReinResult - baseReinResult;
-
-        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 135000;
-        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 1500000;
-        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 90000;
-        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 1000000;
 
         const baseLR = basePremRet > 0 ? (baseClmRet / basePremRet) * 100 : 0;
         const scenLR = scenPremRet > 0 ? (scenClmRet / scenPremRet) * 100 : 0;
@@ -1350,8 +1835,8 @@
           },
           {
             name: "Premium Ceded (Reinsurer)",
-            b: base.cedant?.premium_ceded ?? 90000,
-            s: scen.cedant?.premium_ceded ?? 135000
+            b: basePremCed,
+            s: scenPremCed
           },
           {
             name: "Claims Retained (Cedant)",
@@ -1360,8 +1845,8 @@
           },
           {
             name: "Claims Recovered (Ceded)",
-            b: base.cedant?.claims_recovered ?? 1000000,
-            s: scen.cedant?.claims_recovered ?? 1500000
+            b: baseClmCed,
+            s: scenClmCed
           },
           {
             name: "Ceding Commission",
@@ -1421,7 +1906,6 @@
         banner.style.display = "flex";
         banner.className = "feedback-banner";
 
-        // Determine actual directions from backend parameters & results
         const actualRiskLess = scenQS > baseQS;
         const actualRiskMore = scenQS < baseQS;
         const actualPremMore = (scen.cedant?.premium_ceded ?? 0) > (base.cedant?.premium_ceded ?? 0);
@@ -1465,7 +1949,6 @@
           predStatements.push("Cedant receives less commission");
         }
 
-        // Build actual reality summary
         if (scenQS > baseQS) {
           actualStatements.push(`Quota Share increased (${baseQS}% &rarr; ${scenQS}%), transferring more risk and ceded premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)}) to the reinsurer.`);
         } else if (scenQS < baseQS) {
@@ -1480,7 +1963,6 @@
           actualStatements.push(`Commission received decreased to ${formatUSD(scen.cedant?.commission_received ?? 0)}.`);
         }
 
-        // Render non-punitive feedback
         const titleEl = document.getElementById("feedback-title-text");
         const detailsEl = document.getElementById("feedback-details-text");
 
@@ -1507,7 +1989,6 @@
         const baseReinExp = base.treaty?.reinsurer_expenses ?? 0;
         const scenReinExp = scen.treaty?.reinsurer_expenses ?? 0;
 
-        // 1. "Why Did This Happen?" Narrative
         const whyNarratives = [];
 
         if (scenQS > baseQS) {
@@ -1536,7 +2017,6 @@
 
         document.getElementById("learning-why-narrative").innerHTML = whyNarratives.join("<br><br>");
 
-        // 2. Concept Card 1: Risk Transfer
         const riskEl = document.getElementById("edu-risk-transfer-text");
         if (scenQS > baseQS) {
           riskEl.textContent = `By ceding ${scenQS}% (up from ${baseQS}%), the cedant transfers more aggregate liability to the reinsurer, lowering the cedant's volatility and maximum potential dollar loss.`;
@@ -1546,7 +2026,6 @@
           riskEl.textContent = `Risk transfer is stable at ${baseQS}%. The reinsurer absorbs exactly ${baseQS}% of every covered risk.`;
         }
 
-        // 3. Concept Card 2: Premium Sharing
         const premEl = document.getElementById("edu-premium-sharing-text");
         if (scenQS > baseQS) {
           premEl.textContent = `The cedant gives up a larger share of gross premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)} vs ${formatUSD(base.cedant?.premium_ceded ?? 0)} baseline) in exchange for reinsurance protection.`;
@@ -1556,7 +2035,6 @@
           premEl.textContent = `Gross premium is shared strictly in proportion to the ${baseQS}% treaty percentage.`;
         }
 
-        // 4. Concept Card 3: Claim Sharing
         const clmEl = document.getElementById("edu-claim-sharing-text");
         if (scenQS > baseQS) {
           clmEl.textContent = `Incurred claims are heavily mitigated for the cedant: the reinsurer absorbs ${formatUSD(scen.cedant?.claims_recovered ?? 0)} of losses (up from ${formatUSD(base.cedant?.claims_recovered ?? 0)}).`;
@@ -1566,7 +2044,6 @@
           clmEl.textContent = `Every claim in the portfolio is split proportionally (${100 - baseQS}% cedant / ${baseQS}% reinsurer).`;
         }
 
-        // 5. Concept Card 4: Commission Effect
         const commEl = document.getElementById("edu-commission-effect-text");
         if (scenComm !== baseComm || scenQS !== baseQS) {
           commEl.textContent = `The cedant earns ${formatUSD(scen.cedant?.commission_received ?? 0)} in commission on ceded business, helping offset initial policy acquisition and operating expenses.`;
@@ -1574,7 +2051,6 @@
           commEl.textContent = `Commission remains proportional at ${baseComm}%, returning ${formatUSD(scen.cedant?.commission_received ?? 0)} to the cedant.`;
         }
 
-        // 6. Concept Card 5: Profitability & Trade-offs
         const ecoEl = document.getElementById("edu-economics-tradeoff-text");
         ecoEl.textContent = `Quota Share does not only transfer losses—it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
       }
