@@ -11,83 +11,108 @@
     <header class="app-header">
       <div class="header-content">
         <h1>EdInsured Treaty Lab</h1>
-        <p class="subtitle">Quota Share Treaty Simulator (M4.4)</p>
+        <p class="subtitle">Quota Share Treaty Simulator — Student Interaction Lab (M4.5)</p>
       </div>
     </header>
 
     <main class="main-layout">
-      <!-- Configuration Panel -->
+      <!-- 1. Interactive Configuration Panel -->
       <section class="config-panel">
-        <h2>1. Configure Simulation</h2>
-        
-        <form id="simulation-form">
+        <div class="panel-title-bar">
+          <h2>1. Configure Simulation</h2>
+          <button type="button" id="reset-btn" class="btn btn-secondary btn-sm" title="Reset to standard defaults">
+            Reset Portfolio
+          </button>
+        </div>
+
+        <!-- Presets Selection Bar -->
+        <div class="preset-section">
+          <label class="preset-label">Try a Preset:</label>
+          <div class="preset-chips-grid">
+            <button type="button" class="preset-btn active" data-preset="standard">Standard (40% QS)</button>
+            <button type="button" class="preset-btn" data-preset="high_loss">High Loss</button>
+            <button type="button" class="preset-btn" data-preset="no_claims">No Claims</button>
+            <button type="button" class="preset-btn" data-preset="full_qs">100% QS</button>
+          </div>
+        </div>
+
+        <form id="simulation-form" novalidate>
+          <!-- Treaty Parameters -->
           <div class="form-section">
             <h3>Treaty Parameters</h3>
-            <div class="form-group">
-              <label for="quota-share">Quota Share Cession (%)</label>
-              <input type="number" id="quota-share" min="0" max="100" step="0.1" value="40" required />
+            <div class="form-row-two">
+              <div class="form-group">
+                <label for="quota-share">Quota Share Cession (%)</label>
+                <div class="input-addon-group">
+                  <input type="number" id="quota-share" min="0" max="100" step="0.1" value="40" placeholder="0 - 100" required />
+                  <span class="addon">%</span>
+                </div>
+                <div class="field-error" id="error-quota-share"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="ceding-comm">Ceding Commission (%)</label>
+                <div class="input-addon-group">
+                  <input type="number" id="ceding-comm" min="0" max="100" step="0.1" value="30" placeholder="0 - 100" required />
+                  <span class="addon">%</span>
+                </div>
+                <div class="field-error" id="error-ceding-comm"></div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="ceding-comm">Ceding Commission (%)</label>
-              <input type="number" id="ceding-comm" min="0" max="100" step="0.1" value="30" required />
+
+            <!-- Portfolio-Level Expenses -->
+            <div class="form-row-two">
+              <div class="form-group">
+                <label for="cedant-expenses">Cedant Expenses ($)</label>
+                <div class="input-addon-group">
+                  <span class="addon">$</span>
+                  <input type="number" id="cedant-expenses" min="0" step="100" value="0" placeholder="0" />
+                </div>
+                <div class="field-error" id="error-cedant-expenses"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="reinsurer-expenses">Reinsurer Expenses ($)</label>
+                <div class="input-addon-group">
+                  <span class="addon">$</span>
+                  <input type="number" id="reinsurer-expenses" min="0" step="100" value="0" placeholder="0" />
+                </div>
+                <div class="field-error" id="error-reinsurer-expenses"></div>
+              </div>
             </div>
           </div>
 
+          <!-- Dynamic Portfolio Editor -->
           <div class="form-section">
-            <h3>Portfolio Risks</h3>
-            <div id="risks-container">
-              <!-- Risk 1 -->
-              <div class="risk-entry-card" data-risk-index="0">
-                <div class="risk-title">Risk 001</div>
-                <div class="risk-inputs">
-                  <label>Sum Insured ($)</label>
-                  <input type="number" class="risk-si" value="10000000" required />
-                  <label>Premium ($)</label>
-                  <input type="number" class="risk-prem" value="50000" required />
-                  <label>Claim ($)</label>
-                  <input type="number" class="risk-claim" value="2000000" required />
-                </div>
-              </div>
+            <div class="portfolio-header-row">
+              <h3>Portfolio Risks (<span id="risk-count-label">3</span>)</h3>
+              <button type="button" id="add-risk-btn" class="btn btn-outline btn-xs">+ Add Risk</button>
+            </div>
+            <div class="field-error" id="error-portfolio-global"></div>
 
-              <!-- Risk 2 -->
-              <div class="risk-entry-card" data-risk-index="1">
-                <div class="risk-title">Risk 002</div>
-                <div class="risk-inputs">
-                  <label>Sum Insured ($)</label>
-                  <input type="number" class="risk-si" value="5000000" required />
-                  <label>Premium ($)</label>
-                  <input type="number" class="risk-prem" value="75000" required />
-                  <label>Claim ($)</label>
-                  <input type="number" class="risk-claim" value="0" required />
-                </div>
-              </div>
-
-              <!-- Risk 3 -->
-              <div class="risk-entry-card" data-risk-index="2">
-                <div class="risk-title">Risk 003</div>
-                <div class="risk-inputs">
-                  <label>Sum Insured ($)</label>
-                  <input type="number" class="risk-si" value="20000000" required />
-                  <label>Premium ($)</label>
-                  <input type="number" class="risk-prem" value="100000" required />
-                  <label>Claim ($)</label>
-                  <input type="number" class="risk-claim" value="500000" required />
-                </div>
-              </div>
+            <div id="risks-container" class="risks-list">
+              <!-- Dynamically rendered risk rows -->
             </div>
           </div>
 
-          <button type="submit" id="simulate-btn" class="btn btn-primary">Run Simulation</button>
+          <!-- Simulation Actions -->
+          <div class="form-actions">
+            <button type="submit" id="simulate-btn" class="btn btn-primary btn-block">
+              <span class="btn-text">Run Simulation</span>
+              <span class="btn-spinner" style="display: none;">Simulating portfolio...</span>
+            </button>
+          </div>
         </form>
       </section>
 
-      <!-- Results Dashboard Panel -->
-      <section class="results-panel">
+      <!-- 2. Results Dashboard Panel -->
+      <section class="results-panel" id="results-panel-container">
         <div id="error-banner" class="error-banner" style="display: none;"></div>
         <div id="results-dashboard">
           <div class="placeholder-state">
-            <h3>Ready to Simulate</h3>
-            <p>Click <strong>"Run Simulation"</strong> to execute the Quota Share calculations and inspect the results.</p>
+            <div class="placeholder-icon">📊</div>
+            <h3>Ready to Experiment</h3>
+            <p>Modify treaty parameters or edit portfolio risks, then click <strong>"Run Simulation"</strong>.</p>
           </div>
         </div>
       </section>

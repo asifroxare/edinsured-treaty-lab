@@ -1,6 +1,56 @@
 /**
- * EdInsured Treaty Lab — M4.4 Results Dashboard Renderer
+ * EdInsured Treaty Lab — M4.5 Student Interaction Lab
+ * Presentation & Input Layer
  */
+
+const PRESETS = {
+  standard: {
+    qs_pct: 40,
+    ceding_comm_pct: 30,
+    cedant_expenses: 0,
+    reinsurer_expenses: 0,
+    risks: [
+      { risk_id: 'Risk 001', sum_insured: 10000000, premium: 50000, claim: 2000000 },
+      { risk_id: 'Risk 002', sum_insured: 5000000, premium: 75000, claim: 0 },
+      { risk_id: 'Risk 003', sum_insured: 20000000, premium: 100000, claim: 500000 }
+    ]
+  },
+  high_loss: {
+    qs_pct: 40,
+    ceding_comm_pct: 30,
+    cedant_expenses: 0,
+    reinsurer_expenses: 0,
+    risks: [
+      { risk_id: 'Risk 001', sum_insured: 10000000, premium: 50000, claim: 8000000 },
+      { risk_id: 'Risk 002', sum_insured: 5000000, premium: 75000, claim: 4000000 },
+      { risk_id: 'Risk 003', sum_insured: 20000000, premium: 100000, claim: 18000000 }
+    ]
+  },
+  no_claims: {
+    qs_pct: 40,
+    ceding_comm_pct: 30,
+    cedant_expenses: 0,
+    reinsurer_expenses: 0,
+    risks: [
+      { risk_id: 'Risk 001', sum_insured: 10000000, premium: 50000, claim: 0 },
+      { risk_id: 'Risk 002', sum_insured: 5000000, premium: 75000, claim: 0 },
+      { risk_id: 'Risk 003', sum_insured: 20000000, premium: 100000, claim: 0 }
+    ]
+  },
+  full_qs: {
+    qs_pct: 100,
+    ceding_comm_pct: 30,
+    cedant_expenses: 0,
+    reinsurer_expenses: 0,
+    risks: [
+      { risk_id: 'Risk 001', sum_insured: 10000000, premium: 50000, claim: 2000000 },
+      { risk_id: 'Risk 002', sum_insured: 5000000, premium: 75000, claim: 0 },
+      { risk_id: 'Risk 003', sum_insured: 20000000, premium: 100000, claim: 500000 }
+    ]
+  }
+};
+
+let currentRisks = JSON.parse(JSON.stringify(PRESETS.standard.risks));
 
 const formatCurrency = (val, decimals = 0) => {
   if (val === null || val === undefined || isNaN(val)) return '$0';
@@ -17,56 +67,278 @@ const formatPercent = (val) => {
   return `${Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
 };
 
-function getSimulateUrl() {
-  return '/simulate';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+  renderPortfolioEditor();
+  attachEventListeners();
+});
+
+function attachEventListeners() {
   const form = document.getElementById('simulation-form');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      await executeSimulation();
+      await handleRunSimulation();
     });
   }
-});
 
-async function executeSimulation() {
-  const errorBanner = document.getElementById('error-banner');
-  if (errorBanner) errorBanner.style.display = 'none';
+  const addBtn = document.getElementById('add-risk-btn');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      addNewRisk();
+    });
+  }
 
-  let rawQs = parseFloat(document.getElementById('quota-share').value) || 0;
-  let rawComm = parseFloat(document.getElementById('ceding-comm').value) || 0;
+  const resetBtn = document.getElementById('reset-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      resetPortfolio();
+    });
+  }
 
-  // Ensure decimals between 0.0 and 1.0
-  let qsDecimal = rawQs > 1.0 ? rawQs / 100.0 : rawQs;
-  let commDecimal = rawComm > 1.0 ? rawComm / 100.0 : rawComm;
-
-  const riskCards = document.querySelectorAll('.risk-entry-card');
-  const risks = [];
-
-  riskCards.forEach((card, idx) => {
-    const si = parseFloat(card.querySelector('.risk-si').value) || 0;
-    const prem = parseFloat(card.querySelector('.risk-prem').value) || 0;
-    const claim = parseFloat(card.querySelector('.risk-claim').value) || 0;
-    risks.push({
-      risk_id: `Risk 00${idx + 1}`,
-      sum_insured: si,
-      premium: prem,
-      claim: claim
+  const presetButtons = document.querySelectorAll('.preset-btn');
+  presetButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      presetButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const presetKey = btn.dataset.preset;
+      if (PRESETS[presetKey]) {
+        loadPreset(PRESETS[presetKey]);
+      }
     });
   });
+}
 
-  const payload = {
-    qs_pct: qsDecimal,
-    ceding_comm_pct: commDecimal,
-    cedant_expenses: 0.0,
-    reinsurer_expenses: 0.0,
-    risks: risks
+function renderPortfolioEditor() {
+  const container = document.getElementById('risks-container');
+  const countLabel = document.getElementById('risk-count-label');
+  if (!container) return;
+
+  if (countLabel) {
+    countLabel.textContent = currentRisks.length;
+  }
+
+  container.innerHTML = currentRisks.map((risk, index) => `
+    <div class="risk-entry-card" data-index="${index}">
+      <div class="risk-card-top">
+        <span class="risk-title font-mono">${risk.risk_id}</span>
+        ${currentRisks.length > 1 ? `
+          <button type="button" class="btn-delete-risk" onclick="deleteRisk(${index})" title="Delete Risk">
+            ✕ Remove
+          </button>
+        ` : '<span class="min-risk-tag">Min 1 Risk</span>'}
+      </div>
+
+      <div class="risk-inputs-grid">
+        <div class="input-field">
+          <label>Sum Insured ($)</label>
+          <input type="number" class="risk-input" data-field="sum_insured" value="${risk.sum_insured}" min="0" step="1000" />
+          <div class="field-error inline-err" id="error-risk-${index}-sum_insured"></div>
+        </div>
+
+        <div class="input-field">
+          <label>Gross Premium ($)</label>
+          <input type="number" class="risk-input" data-field="premium" value="${risk.premium}" min="0" step="500" />
+          <div class="field-error inline-err" id="error-risk-${index}-premium"></div>
+        </div>
+
+        <div class="input-field">
+          <label>Gross Claim ($)</label>
+          <input type="number" class="risk-input" data-field="claim" value="${risk.claim}" min="0" step="500" />
+          <div class="field-error inline-err" id="error-risk-${index}-claim"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.risk-input').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const card = e.target.closest('.risk-entry-card');
+      const idx = parseInt(card.dataset.index, 10);
+      const field = e.target.dataset.field;
+      currentRisks[idx][field] = parseFloat(e.target.value) || 0;
+    });
+  });
+}
+
+function addNewRisk() {
+  const nextNum = currentRisks.length + 1;
+  const formattedId = `Risk ${String(nextNum).padStart(3, '0')}`;
+
+  currentRisks.push({
+    risk_id: formattedId,
+    sum_insured: 10000000,
+    premium: 50000,
+    claim: 0
+  });
+
+  renderPortfolioEditor();
+}
+
+window.deleteRisk = function(index) {
+  if (currentRisks.length <= 1) {
+    showGlobalError('Cannot delete the final remaining risk. At least 1 risk is required.');
+    return;
+  }
+  currentRisks.splice(index, 1);
+  currentRisks.forEach((r, idx) => {
+    r.risk_id = `Risk ${String(idx + 1).padStart(3, '0')}`;
+  });
+  renderPortfolioEditor();
+};
+
+function loadPreset(preset) {
+  document.getElementById('quota-share').value = preset.qs_pct;
+  document.getElementById('ceding-comm').value = preset.ceding_comm_pct;
+  document.getElementById('cedant-expenses').value = preset.cedant_expenses;
+  document.getElementById('reinsurer-expenses').value = preset.reinsurer_expenses;
+
+  currentRisks = JSON.parse(JSON.stringify(preset.risks));
+  clearAllErrors();
+  renderPortfolioEditor();
+}
+
+function resetPortfolio() {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  const stdBtn = document.querySelector('.preset-btn[data-preset="standard"]');
+  if (stdBtn) stdBtn.classList.add('active');
+
+  loadPreset(PRESETS.standard);
+
+  const dashboard = document.getElementById('results-dashboard');
+  if (dashboard) {
+    dashboard.innerHTML = `
+      <div class="placeholder-state">
+        <div class="placeholder-icon">📊</div>
+        <h3>Ready to Experiment</h3>
+        <p>Portfolio reset to standard defaults. Click <strong>"Run Simulation"</strong> to execute.</p>
+      </div>
+    `;
+  }
+}
+
+function clearAllErrors() {
+  document.querySelectorAll('.field-error').forEach(el => {
+    el.textContent = '';
+    el.style.display = 'none';
+  });
+  const banner = document.getElementById('error-banner');
+  if (banner) banner.style.display = 'none';
+}
+
+function showFieldError(elementId, message) {
+  const el = document.getElementById(elementId);
+  if (el) {
+    el.textContent = message;
+    el.style.display = 'block';
+  }
+}
+
+function showGlobalError(message) {
+  const banner = document.getElementById('error-banner');
+  if (banner) {
+    banner.textContent = message;
+    banner.style.display = 'block';
+  }
+}
+
+function validateInputs() {
+  clearAllErrors();
+  let isValid = true;
+
+  const qsInput = document.getElementById('quota-share');
+  const qsVal = parseFloat(qsInput.value);
+  if (isNaN(qsVal) || qsVal < 0 || qsVal > 100) {
+    showFieldError('error-quota-share', 'Quota Share must be between 0% and 100%.');
+    isValid = false;
+  }
+
+  const commInput = document.getElementById('ceding-comm');
+  const commVal = parseFloat(commInput.value);
+  if (isNaN(commVal) || commVal < 0 || commVal > 100) {
+    showFieldError('error-ceding-comm', 'Ceding Commission must be between 0% and 100%.');
+    isValid = false;
+  }
+
+  const cedExpInput = document.getElementById('cedant-expenses');
+  const cedExpVal = parseFloat(cedExpInput.value);
+  if (isNaN(cedExpVal) || cedExpVal < 0) {
+    showFieldError('error-cedant-expenses', 'Cedant Expenses cannot be negative.');
+    isValid = false;
+  }
+
+  const reinExpInput = document.getElementById('reinsurer-expenses');
+  const reinExpVal = parseFloat(reinExpInput.value);
+  if (isNaN(reinExpVal) || reinExpVal < 0) {
+    showFieldError('error-reinsurer-expenses', 'Reinsurer Expenses cannot be negative.');
+    isValid = false;
+  }
+
+  if (!currentRisks || currentRisks.length === 0) {
+    showFieldError('error-portfolio-global', 'Portfolio must contain at least one risk.');
+    isValid = false;
+  }
+
+  currentRisks.forEach((risk, idx) => {
+    if (isNaN(risk.sum_insured) || risk.sum_insured < 0) {
+      showFieldError(`error-risk-${idx}-sum_insured`, 'Sum Insured cannot be negative.');
+      isValid = false;
+    }
+    if (isNaN(risk.premium) || risk.premium < 0) {
+      showFieldError(`error-risk-${idx}-premium`, 'Premium cannot be negative.');
+      isValid = false;
+    }
+    if (isNaN(risk.claim) || risk.claim < 0) {
+      showFieldError(`error-risk-${idx}-claim`, 'Claim cannot be negative.');
+      isValid = false;
+    }
+  });
+
+  return isValid;
+}
+
+function buildSimulationPayload() {
+  const rawQs = parseFloat(document.getElementById('quota-share').value) || 0;
+  const rawComm = parseFloat(document.getElementById('ceding-comm').value) || 0;
+  const cedExp = parseFloat(document.getElementById('cedant-expenses').value) || 0;
+  const reinExp = parseFloat(document.getElementById('reinsurer-expenses').value) || 0;
+
+  // Convert 40 -> 0.40, 30 -> 0.30
+  const qsDecimal = rawQs > 1.0 ? rawQs / 100.0 : rawQs;
+  const commDecimal = rawComm > 1.0 ? rawComm / 100.0 : rawComm;
+
+  return {
+    treaty: {
+      quota_share_pct: qsDecimal,
+      ceding_commission_pct: commDecimal,
+      cedant_expenses: cedExp,
+      reinsurer_expenses: reinExp
+    },
+    risks: currentRisks.map(r => ({
+      risk_id: r.risk_id,
+      sum_insured: Number(r.sum_insured),
+      premium: Number(r.premium),
+      claim: Number(r.claim)
+    }))
   };
+}
+
+async function handleRunSimulation() {
+  if (!validateInputs()) {
+    return;
+  }
+
+  const simulateBtn = document.getElementById('simulate-btn');
+  const btnText = simulateBtn.querySelector('.btn-text');
+  const btnSpinner = simulateBtn.querySelector('.btn-spinner');
+
+  simulateBtn.disabled = true;
+  if (btnText) btnText.style.display = 'none';
+  if (btnSpinner) btnSpinner.style.display = 'inline';
+
+  const payload = buildSimulationPayload();
 
   try {
-    const response = await fetch(getSimulateUrl(), {
+    const response = await fetch('/simulate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,18 +348,25 @@ async function executeSimulation() {
     });
 
     if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(JSON.stringify(errData.detail || response.statusText));
+      const errJson = await response.json().catch(() => ({}));
+      const errorDetail = errJson.detail || response.statusText;
+      throw new Error(typeof errorDetail === 'object' ? JSON.stringify(errorDetail) : errorDetail);
     }
 
     const data = await response.json();
     renderResultsDashboard(data);
+
+    const resultsPanel = document.getElementById('results-panel-container');
+    if (resultsPanel && window.innerWidth <= 1024) {
+      resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    }
   } catch (err) {
     console.error('Simulation Failed:', err);
-    if (errorBanner) {
-      errorBanner.textContent = `Simulation Error: ${err.message}`;
-      errorBanner.style.display = 'block';
-    }
+    showGlobalError(`Simulation Request Failed: ${err.message}`);
+  } finally {
+    simulateBtn.disabled = false;
+    if (btnText) btnText.style.display = 'inline';
+    if (btnSpinner) btnSpinner.style.display = 'none';
   }
 }
 
@@ -115,7 +394,7 @@ function renderTreatyConfigBadge(treaty) {
 
   return `
     <div class="treaty-config-bar">
-      <div class="config-title">Active Treaty Configuration</div>
+      <div class="config-title">Active Simulation Output</div>
       <div class="config-chips">
         <span class="chip"><strong>Quota Share:</strong> ${formatPercent(qsDisplay)}</span>
         <span class="chip"><strong>Ceding Commission:</strong> ${formatPercent(commDisplay)}</span>
@@ -277,6 +556,11 @@ function renderCedantVsReinsurer(cedant = {}, reinsurer = {}) {
                 <td>Commission Received</td>
                 <td class="text-right text-green">+${formatCurrency(cedant.commission_received)}</td>
               </tr>
+              ${cedant.expenses ? `
+              <tr>
+                <td>Direct Expenses</td>
+                <td class="text-right text-slate">-${formatCurrency(cedant.expenses)}</td>
+              </tr>` : ''}
               <tr class="result-row">
                 <td><strong>Net Underwriting Result</strong></td>
                 <td class="text-right ${cedant.net_result < 0 ? 'text-red' : 'text-green'}">
@@ -310,6 +594,11 @@ function renderCedantVsReinsurer(cedant = {}, reinsurer = {}) {
                 <td>Commission Paid</td>
                 <td class="text-right text-slate">-${formatCurrency(reinsurer.commission_paid)}</td>
               </tr>
+              ${reinsurer.expenses ? `
+              <tr>
+                <td>Treaty Expenses</td>
+                <td class="text-right text-slate">-${formatCurrency(reinsurer.expenses)}</td>
+              </tr>` : ''}
               <tr class="result-row">
                 <td><strong>Net Underwriting Result</strong></td>
                 <td class="text-right ${reinsurer.net_result < 0 ? 'text-red' : 'text-green'}">
