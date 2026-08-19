@@ -214,6 +214,12 @@
       background: #e2e8f0;
     }
 
+    .btn-preset.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
     .btn-primary {
       background-color: var(--primary);
       color: #ffffff;
@@ -306,6 +312,134 @@
     /* Scenario Lab Section */
     .scenario-lab-section {
       border-left: 4px solid var(--accent);
+    }
+
+    .challenge-panel {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .challenge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .challenge-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .challenge-desc {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    /* Student Prediction Panel */
+    .prediction-panel {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+    }
+
+    .prediction-panel h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .prediction-panel p {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .prediction-options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    .prediction-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #1e293b;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .prediction-label:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .prediction-label input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    /* Prediction Result Feedback Banner */
+    .feedback-banner {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .feedback-correct {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .feedback-partial {
+      background: #fefce8;
+      border: 1px solid #fde047;
+      color: #854d0e;
+    }
+
+    .feedback-incorrect {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .feedback-title {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedback-details {
+      font-size: 0.85rem;
+      line-height: 1.5;
     }
 
     .scenario-grid {
@@ -408,7 +542,7 @@
       color: #64748b;
     }
 
-    /* M5.3 Learning & Interpretation Layer */
+    /* M5.3 / M5.4 Learning Layer */
     .learning-layer-section {
       margin-top: 24px;
       border-top: 1px solid var(--border-color);
@@ -498,6 +632,9 @@
         display: none;
       }
       .learning-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .prediction-options-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -639,12 +776,12 @@
       </div>
     </section>
 
-    <!-- 3. SCENARIO LAB -->
+    <!-- 3. SCENARIO LAB & CHALLENGE MODE -->
     <section class="section-card scenario-lab-section" id="scenario-section">
       <div class="section-header">
         <div>
-          <h2>3. Scenario Lab (Controlled Experiments)</h2>
-          <p class="section-subtext">Vary treaty terms against the active portfolio to analyze financial sensitivity.</p>
+          <h2>3. Scenario Lab (Controlled Experiments & Challenges)</h2>
+          <p class="section-subtext">Formulate hypotheses, adjust treaty terms, and compare predicted vs actual underwriting results.</p>
         </div>
         <div class="preset-group">
           <span class="preset-label">Scenario Presets:</span>
@@ -655,6 +792,22 @@
         </div>
       </div>
 
+      <!-- M5.4 Educational Challenge Selector -->
+      <div class="challenge-panel">
+        <div class="challenge-header">
+          <span class="challenge-title">🎯 Scenario Challenge</span>
+          <div class="preset-group">
+            <button type="button" class="btn btn-preset active" id="btn-challenge-1">Challenge 1: Increase Risk Transfer</button>
+            <button type="button" class="btn btn-preset" id="btn-challenge-2">Challenge 2: Retain More Exposure</button>
+            <button type="button" class="btn btn-preset" id="btn-challenge-3">Challenge 3: Commission Economics</button>
+          </div>
+        </div>
+        <p class="challenge-desc" id="challenge-instructions">
+          <strong>Objective:</strong> The insurer wants to transfer more portfolio risk to the reinsurer. Configure the scenario to achieve higher ceding protection.
+        </p>
+      </div>
+
+      <!-- Scenario Treaty Inputs -->
       <div class="treaty-grid scenario-grid">
         <div class="form-group">
           <label for="scenario-qs-percentage">Scenario Quota Share (%)</label>
@@ -674,15 +827,53 @@
         </div>
       </div>
 
+      <!-- M5.4 Student Prediction Panel (Before You Run) -->
+      <div class="prediction-panel" id="prediction-panel">
+        <h4>🤔 Before You Run: What do you predict will happen?</h4>
+        <p>Select your hypotheses regarding how this scenario will alter portfolio economics:</p>
+        <div class="prediction-options-grid">
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-risk-less">
+            <span>Cedant retains <strong>less risk</strong></span>
+          </label>
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-risk-more">
+            <span>Cedant retains <strong>more risk</strong></span>
+          </label>
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-prem-more">
+            <span>Reinsurer receives <strong>more premium</strong></span>
+          </label>
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-prem-less">
+            <span>Reinsurer receives <strong>less premium</strong></span>
+          </label>
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-comm-more">
+            <span>Cedant receives <strong>more commission</strong></span>
+          </label>
+          <label class="prediction-label">
+            <input type="checkbox" id="pred-comm-less">
+            <span>Cedant receives <strong>less commission</strong></span>
+          </label>
+        </div>
+      </div>
+
       <div class="action-bar">
         <div></div>
         <div class="action-bar-right">
           <button type="button" class="btn btn-outline" id="btn-reset-scenario">Reset Scenario</button>
-          <button type="button" class="btn btn-accent" id="btn-run-scenario">Run Scenario</button>
+          <button type="button" class="btn btn-accent" id="btn-run-scenario">Run Challenge Simulation</button>
         </div>
       </div>
 
       <div class="comparison-container" id="comparison-container" style="display: none;">
+        <!-- M5.4 Prediction Feedback Banner -->
+        <div class="feedback-banner" id="prediction-feedback-banner" style="display: none;">
+          <div class="feedback-title" id="feedback-title-text"></div>
+          <div class="feedback-details" id="feedback-details-text"></div>
+        </div>
+
         <!-- Banner -->
         <div class="what-changed-banner" id="what-changed-banner">
           <div class="badge-item">
@@ -815,6 +1006,41 @@
 
       const riskRowsBody = document.getElementById("risk-rows");
 
+      // Challenges definition
+      const challenges = [
+        {
+          id: "btn-challenge-1",
+          qs: 60,
+          comm: 30,
+          desc: "<strong>Objective:</strong> Increase the proportion of portfolio risk transferred to the reinsurer. Set a higher Quota Share to transfer more exposure."
+        },
+        {
+          id: "btn-challenge-2",
+          qs: 20,
+          comm: 30,
+          desc: "<strong>Objective:</strong> Keep a larger share of premium and claim exposure with the cedant. Lower the Quota Share to retain more business."
+        },
+        {
+          id: "btn-challenge-3",
+          qs: 40,
+          comm: 35,
+          desc: "<strong>Objective:</strong> Explore how ceding commission affects party economics without changing underlying premium/claim risk transfer."
+        }
+      ];
+
+      challenges.forEach(c => {
+        const btn = document.getElementById(c.id);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll(".challenge-header .btn-preset").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            scenarioQsInput.value = c.qs;
+            scenarioCommInput.value = c.comm;
+            document.getElementById("challenge-instructions").innerHTML = c.desc;
+          });
+        }
+      });
+
       // Presets - Baseline
       document.getElementById("preset-standard").addEventListener("click", () => {
         qsInput.value = 40;
@@ -922,6 +1148,7 @@
         commInput.value = 30;
         cedExpInput.value = 0;
         reinExpInput.value = 0;
+        clearPredictions();
         runBaselineSimulation();
       });
 
@@ -931,9 +1158,15 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        clearPredictions();
         document.getElementById("comparison-container").style.display = "none";
+        document.getElementById("prediction-feedback-banner").style.display = "none";
         scenarioData = null;
       });
+
+      function clearPredictions() {
+        document.querySelectorAll("#prediction-panel input[type='checkbox']").forEach(cb => cb.checked = false);
+      }
 
       function attachDeleteHandler(btn) {
         btn.addEventListener("click", (e) => {
@@ -1162,8 +1395,110 @@
           </tr>
         `).join("");
 
-        // Render M5.3 Learning Insights
+        // M5.4 Prediction Evaluation
+        evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm);
+
+        // M5.3 Educational Insights
         generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm);
+      }
+
+      function evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm) {
+        const predRiskLess = document.getElementById("pred-risk-less").checked;
+        const predRiskMore = document.getElementById("pred-risk-more").checked;
+        const predPremMore = document.getElementById("pred-prem-more").checked;
+        const predPremLess = document.getElementById("pred-prem-less").checked;
+        const predCommMore = document.getElementById("pred-comm-more").checked;
+        const predCommLess = document.getElementById("pred-comm-less").checked;
+
+        const anyChecked = predRiskLess || predRiskMore || predPremMore || predPremLess || predCommMore || predCommLess;
+        const banner = document.getElementById("prediction-feedback-banner");
+
+        if (!anyChecked) {
+          banner.style.display = "none";
+          return;
+        }
+
+        banner.style.display = "flex";
+        banner.className = "feedback-banner";
+
+        // Determine actual directions from backend parameters & results
+        const actualRiskLess = scenQS > baseQS;
+        const actualRiskMore = scenQS < baseQS;
+        const actualPremMore = (scen.cedant?.premium_ceded ?? 0) > (base.cedant?.premium_ceded ?? 0);
+        const actualPremLess = (scen.cedant?.premium_ceded ?? 0) < (base.cedant?.premium_ceded ?? 0);
+        const actualCommMore = (scen.cedant?.commission_received ?? 0) > (base.cedant?.commission_received ?? 0);
+        const actualCommLess = (scen.cedant?.commission_received ?? 0) < (base.cedant?.commission_received ?? 0);
+
+        let matches = 0;
+        let selectedCount = 0;
+        const predStatements = [];
+        const actualStatements = [];
+
+        if (predRiskLess) {
+          selectedCount++;
+          if (actualRiskLess) matches++;
+          predStatements.push("Cedant retains less risk");
+        }
+        if (predRiskMore) {
+          selectedCount++;
+          if (actualRiskMore) matches++;
+          predStatements.push("Cedant retains more risk");
+        }
+        if (predPremMore) {
+          selectedCount++;
+          if (actualPremMore) matches++;
+          predStatements.push("Reinsurer receives more premium");
+        }
+        if (predPremLess) {
+          selectedCount++;
+          if (actualPremLess) matches++;
+          predStatements.push("Reinsurer receives less premium");
+        }
+        if (predCommMore) {
+          selectedCount++;
+          if (actualCommMore) matches++;
+          predStatements.push("Cedant receives more commission");
+        }
+        if (predCommLess) {
+          selectedCount++;
+          if (actualCommLess) matches++;
+          predStatements.push("Cedant receives less commission");
+        }
+
+        // Build actual reality summary
+        if (scenQS > baseQS) {
+          actualStatements.push(`Quota Share increased (${baseQS}% &rarr; ${scenQS}%), transferring more risk and ceded premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)}) to the reinsurer.`);
+        } else if (scenQS < baseQS) {
+          actualStatements.push(`Quota Share decreased (${baseQS}% &rarr; ${scenQS}%), leaving more risk and premium retained with the cedant.`);
+        } else {
+          actualStatements.push(`Quota Share was held constant at ${baseQS}%.`);
+        }
+
+        if (actualCommMore) {
+          actualStatements.push(`Commission received increased to ${formatUSD(scen.cedant?.commission_received ?? 0)}.`);
+        } else if (actualCommLess) {
+          actualStatements.push(`Commission received decreased to ${formatUSD(scen.cedant?.commission_received ?? 0)}.`);
+        }
+
+        // Render non-punitive feedback
+        const titleEl = document.getElementById("feedback-title-text");
+        const detailsEl = document.getElementById("feedback-details-text");
+
+        if (matches === selectedCount && selectedCount > 0) {
+          banner.classList.add("feedback-correct");
+          titleEl.innerHTML = "✓ Prediction Correct!";
+        } else if (matches > 0) {
+          banner.classList.add("feedback-partial");
+          titleEl.innerHTML = "△ Prediction Partially Correct";
+        } else {
+          banner.classList.add("feedback-incorrect");
+          titleEl.innerHTML = "✗ Prediction Did Not Match Outcome";
+        }
+
+        detailsEl.innerHTML = `
+          <strong>Your Prediction:</strong> ${predStatements.join(", ")}.<br>
+          <strong>Actual Result:</strong> ${actualStatements.join(" ")}
+        `;
       }
 
       function generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm) {
@@ -1201,7 +1536,7 @@
 
         document.getElementById("learning-why-narrative").innerHTML = whyNarratives.join("<br><br>");
 
-        // 2. Educational Concept Card 1: Risk Transfer
+        // 2. Concept Card 1: Risk Transfer
         const riskEl = document.getElementById("edu-risk-transfer-text");
         if (scenQS > baseQS) {
           riskEl.textContent = `By ceding ${scenQS}% (up from ${baseQS}%), the cedant transfers more aggregate liability to the reinsurer, lowering the cedant's volatility and maximum potential dollar loss.`;
@@ -1211,7 +1546,7 @@
           riskEl.textContent = `Risk transfer is stable at ${baseQS}%. The reinsurer absorbs exactly ${baseQS}% of every covered risk.`;
         }
 
-        // 3. Educational Concept Card 2: Premium Sharing
+        // 3. Concept Card 2: Premium Sharing
         const premEl = document.getElementById("edu-premium-sharing-text");
         if (scenQS > baseQS) {
           premEl.textContent = `The cedant gives up a larger share of gross premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)} vs ${formatUSD(base.cedant?.premium_ceded ?? 0)} baseline) in exchange for reinsurance protection.`;
@@ -1221,7 +1556,7 @@
           premEl.textContent = `Gross premium is shared strictly in proportion to the ${baseQS}% treaty percentage.`;
         }
 
-        // 4. Educational Concept Card 3: Claim Sharing
+        // 4. Concept Card 3: Claim Sharing
         const clmEl = document.getElementById("edu-claim-sharing-text");
         if (scenQS > baseQS) {
           clmEl.textContent = `Incurred claims are heavily mitigated for the cedant: the reinsurer absorbs ${formatUSD(scen.cedant?.claims_recovered ?? 0)} of losses (up from ${formatUSD(base.cedant?.claims_recovered ?? 0)}).`;
@@ -1231,7 +1566,7 @@
           clmEl.textContent = `Every claim in the portfolio is split proportionally (${100 - baseQS}% cedant / ${baseQS}% reinsurer).`;
         }
 
-        // 5. Educational Concept Card 4: Commission Effect
+        // 5. Concept Card 4: Commission Effect
         const commEl = document.getElementById("edu-commission-effect-text");
         if (scenComm !== baseComm || scenQS !== baseQS) {
           commEl.textContent = `The cedant earns ${formatUSD(scen.cedant?.commission_received ?? 0)} in commission on ceded business, helping offset initial policy acquisition and operating expenses.`;
@@ -1239,7 +1574,7 @@
           commEl.textContent = `Commission remains proportional at ${baseComm}%, returning ${formatUSD(scen.cedant?.commission_received ?? 0)} to the cedant.`;
         }
 
-        // 6. Educational Concept Card 5: Profitability & Trade-offs
+        // 6. Concept Card 5: Profitability & Trade-offs
         const ecoEl = document.getElementById("edu-economics-tradeoff-text");
         ecoEl.textContent = `Quota Share does not only transfer losses—it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
       }
