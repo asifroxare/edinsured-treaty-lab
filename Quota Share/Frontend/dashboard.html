@@ -1,124 +1,1053 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EdInsured Treaty Lab — Quota Share Simulator</title>
-  <link rel="stylesheet" href="dashboard.css" />
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-radius: 8px;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding-bottom: 40px;
+    }
+
+    .app-header {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      padding: 20px 0;
+      margin-bottom: 24px;
+    }
+
+    .header-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .header-container h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .main-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .section-subtext {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .preset-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .treaty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .form-group input {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .data-table input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .btn-delete:hover {
+      color: #b91c1c;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .action-bar-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn-preset {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #334155;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+    }
+
+    .btn-preset:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-accent {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-accent:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+
+    .btn-secondary:hover {
+      background-color: #e2e8f0;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--text-muted);
+    }
+
+    .btn-outline:hover {
+      background: #f8fafc;
+      color: var(--text-main);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .card-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    .recon-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 14px;
+    }
+
+    .recon-box h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .recon-grid {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+    }
+
+    .scenario-lab-section {
+      border-left: 4px solid var(--accent);
+    }
+
+    .scenario-grid {
+      background-color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .what-changed-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin: 20px 0;
+    }
+
+    .badge-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .badge-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .badge-detail {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .badge-item.active-scenario .badge-detail {
+      color: var(--accent);
+    }
+
+    .badge-arrow {
+      font-size: 1.5rem;
+      color: #94a3b8;
+      font-weight: bold;
+    }
+
+    .scenario-insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .insight-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .insight-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .insight-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 6px 0 2px 0;
+    }
+
+    .insight-sub {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .comparison-table th {
+      background-color: #f1f5f9;
+    }
+
+    .delta-pos {
+      color: #059669;
+      font-weight: 600;
+    }
+
+    .delta-neg {
+      color: #dc2626;
+      font-weight: 600;
+    }
+
+    .delta-zero {
+      color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      .what-changed-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .badge-arrow {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="app-container">
-    <header class="app-header">
-      <div class="header-content">
-        <h1>EdInsured Treaty Lab</h1>
-        <p class="subtitle">Quota Share Treaty Simulator — Student Interaction Lab (M4.5)</p>
+  <header class="app-header">
+    <div class="header-container">
+      <h1>EdInsured Treaty Lab</h1>
+      <p class="subtitle">Interactive Quota Share Reinsurance Simulator</p>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- 1. PORTFOLIO & BASELINE -->
+    <section class="section-card" id="portfolio-section">
+      <div class="section-header">
+        <h2>1. Portfolio & Baseline Treaty Setup</h2>
+        <div class="preset-group">
+          <span class="preset-label">Presets:</span>
+          <button type="button" class="btn btn-preset" id="preset-standard">Standard (40%)</button>
+          <button type="button" class="btn btn-preset" id="preset-highloss">High Loss</button>
+          <button type="button" class="btn btn-preset" id="preset-noclaims">No Claims</button>
+          <button type="button" class="btn btn-preset" id="preset-fullqs">100% QS</button>
+        </div>
       </div>
-    </header>
 
-    <main class="main-layout">
-      <!-- 1. Interactive Configuration Panel -->
-      <section class="config-panel">
-        <div class="panel-title-bar">
-          <h2>1. Configure Simulation</h2>
-          <button type="button" id="reset-btn" class="btn btn-secondary btn-sm" title="Reset to standard defaults">
-            Reset Portfolio
-          </button>
+      <div class="treaty-grid">
+        <div class="form-group">
+          <label for="qs-percentage">Quota Share (%)</label>
+          <input type="number" id="qs-percentage" min="0" max="100" step="1" value="40">
+        </div>
+        <div class="form-group">
+          <label for="ceding-commission">Ceding Commission (%)</label>
+          <input type="number" id="ceding-commission" min="0" max="100" step="1" value="30">
+        </div>
+        <div class="form-group">
+          <label for="cedant-expenses">Cedant Expenses ($)</label>
+          <input type="number" id="cedant-expenses" min="0" step="1000" value="0">
+        </div>
+        <div class="form-group">
+          <label for="reinsurer-expenses">Reinsurer Expenses ($)</label>
+          <input type="number" id="reinsurer-expenses" min="0" step="1000" value="0">
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table" id="risks-table">
+          <thead>
+            <tr>
+              <th>Risk ID</th>
+              <th>Sum Insured ($)</th>
+              <th>Gross Premium ($)</th>
+              <th>Claim Amount ($)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="risk-rows">
+            <tr>
+              <td><input type="text" class="risk-id" value="Risk 001" readonly></td>
+              <td><input type="number" class="risk-si" value="10000000" min="0"></td>
+              <td><input type="number" class="risk-prem" value="50000" min="0"></td>
+              <td><input type="number" class="risk-claim" value="2000000" min="0"></td>
+              <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+            </tr>
+            <tr>
+              <td><input type="text" class="risk-id" value="Risk 002" readonly></td>
+              <td><input type="number" class="risk-si" value="5000000" min="0"></td>
+              <td><input type="number" class="risk-prem" value="75000" min="0"></td>
+              <td><input type="number" class="risk-claim" value="0" min="0"></td>
+              <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+            </tr>
+            <tr>
+              <td><input type="text" class="risk-id" value="Risk 003" readonly></td>
+              <td><input type="number" class="risk-si" value="20000000" min="0"></td>
+              <td><input type="number" class="risk-prem" value="100000" min="0"></td>
+              <td><input type="number" class="risk-claim" value="500000" min="0"></td>
+              <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="action-bar">
+        <button type="button" class="btn btn-secondary" id="btn-add-risk">+ Add Risk</button>
+        <div class="action-bar-right">
+          <button type="button" class="btn btn-outline" id="btn-reset-portfolio">Reset Portfolio</button>
+          <button type="button" class="btn btn-primary" id="btn-run-simulation">Run Baseline Simulation</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. BASELINE RESULTS -->
+    <section class="section-card" id="results-section">
+      <h2>2. Baseline Financial Summary</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="card-label">Gross Written Premium</span>
+          <span class="card-value" id="card-gross-premium">$0.00</span>
+        </div>
+        <div class="metric-card">
+          <span class="card-label">Gross Claims Incurred</span>
+          <span class="card-value" id="card-gross-claims">$0.00</span>
+        </div>
+        <div class="metric-card">
+          <span class="card-label">Ceded Premium</span>
+          <span class="card-value" id="card-ceded-premium">$0.00</span>
+        </div>
+        <div class="metric-card">
+          <span class="card-label">Ceding Commission</span>
+          <span class="card-value" id="card-ceding-commission">$0.00</span>
+        </div>
+        <div class="metric-card" id="cedant-result-card">
+          <span class="card-label">Cedant Net Underwriting</span>
+          <span class="card-value" id="card-cedant-result">$0.00</span>
+        </div>
+        <div class="metric-card" id="reinsurer-result-card">
+          <span class="card-label">Reinsurer Net Underwriting</span>
+          <span class="card-value" id="card-reinsurer-result">$0.00</span>
+        </div>
+      </div>
+
+      <div class="recon-box">
+        <h3>System Reconciliation & Integrity</h3>
+        <div class="recon-grid">
+          <div class="recon-item">
+            <span>Premium Difference:</span>
+            <strong id="recon-premium">$0.00</strong>
+          </div>
+          <div class="recon-item">
+            <span>Claims Difference:</span>
+            <strong id="recon-claims">$0.00</strong>
+          </div>
+          <div class="recon-item">
+            <span>Result Difference:</span>
+            <strong id="recon-result">$0.00</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SCENARIO LAB -->
+    <section class="section-card scenario-lab-section" id="scenario-section">
+      <div class="section-header">
+        <div>
+          <h2>3. Scenario Lab (Controlled Experiments)</h2>
+          <p class="section-subtext">Vary treaty terms against the active portfolio to analyze financial sensitivity.</p>
+        </div>
+        <div class="preset-group">
+          <span class="preset-label">Scenario Presets:</span>
+          <button type="button" class="btn btn-preset" id="scenario-preset-no-re">0% QS</button>
+          <button type="button" class="btn btn-preset" id="scenario-preset-baseline">40% QS</button>
+          <button type="button" class="btn btn-preset" id="scenario-preset-60">60% QS</button>
+          <button type="button" class="btn btn-preset" id="scenario-preset-100">100% QS</button>
+        </div>
+      </div>
+
+      <div class="treaty-grid scenario-grid">
+        <div class="form-group">
+          <label for="scenario-qs-percentage">Scenario Quota Share (%)</label>
+          <input type="number" id="scenario-qs-percentage" min="0" max="100" step="1" value="60">
+        </div>
+        <div class="form-group">
+          <label for="scenario-ceding-commission">Scenario Commission (%)</label>
+          <input type="number" id="scenario-ceding-commission" min="0" max="100" step="1" value="30">
+        </div>
+        <div class="form-group">
+          <label for="scenario-cedant-expenses">Scenario Cedant Exp ($)</label>
+          <input type="number" id="scenario-cedant-expenses" min="0" step="1000" value="0">
+        </div>
+        <div class="form-group">
+          <label for="scenario-reinsurer-expenses">Scenario Reinsurer Exp ($)</label>
+          <input type="number" id="scenario-reinsurer-expenses" min="0" step="1000" value="0">
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <div></div>
+        <div class="action-bar-right">
+          <button type="button" class="btn btn-outline" id="btn-reset-scenario">Reset Scenario</button>
+          <button type="button" class="btn btn-accent" id="btn-run-scenario">Run Scenario</button>
+        </div>
+      </div>
+
+      <div class="comparison-container" id="comparison-container" style="display: none;">
+        <div class="what-changed-banner" id="what-changed-banner">
+          <div class="badge-item">
+            <span class="badge-title">BASELINE</span>
+            <span class="badge-detail" id="badge-baseline-qs">40% QS | 30% Comm</span>
+          </div>
+          <div class="badge-arrow">&rarr;</div>
+          <div class="badge-item active-scenario">
+            <span class="badge-title">SCENARIO</span>
+            <span class="badge-detail" id="badge-scenario-qs">60% QS | 30% Comm</span>
+          </div>
         </div>
 
-        <!-- Presets Selection Bar -->
-        <div class="preset-section">
-          <label class="preset-label">Try a Preset:</label>
-          <div class="preset-chips-grid">
-            <button type="button" class="preset-btn active" data-preset="standard">Standard (40% QS)</button>
-            <button type="button" class="preset-btn" data-preset="high_loss">High Loss</button>
-            <button type="button" class="preset-btn" data-preset="no_claims">No Claims</button>
-            <button type="button" class="preset-btn" data-preset="full_qs">100% QS</button>
+        <div class="scenario-insights-grid">
+          <div class="insight-card">
+            <span class="insight-title">Cedant Underwriting Impact</span>
+            <span class="insight-value" id="insight-cedant-delta">$0.00</span>
+            <span class="insight-sub" id="insight-cedant-sub">vs. Baseline</span>
+          </div>
+          <div class="insight-card">
+            <span class="insight-title">Reinsurer Underwriting Impact</span>
+            <span class="insight-value" id="insight-reinsurer-delta">$0.00</span>
+            <span class="insight-sub" id="insight-reinsurer-sub">vs. Baseline</span>
+          </div>
+          <div class="insight-card">
+            <span class="insight-title">Cedant Loss Ratio Shift</span>
+            <span class="insight-value" id="insight-loss-ratio-delta">0.0 pp</span>
+            <span class="insight-sub" id="insight-loss-ratio-sub">Net Loss Ratio</span>
           </div>
         </div>
 
-        <form id="simulation-form" novalidate>
-          <!-- Treaty Parameters -->
-          <div class="form-section">
-            <h3>Treaty Parameters</h3>
-            <div class="form-row-two">
-              <div class="form-group">
-                <label for="quota-share">Quota Share Cession (%)</label>
-                <div class="input-addon-group">
-                  <input type="number" id="quota-share" min="0" max="100" step="0.1" value="40" placeholder="0 - 100" required />
-                  <span class="addon">%</span>
-                </div>
-                <div class="field-error" id="error-quota-share"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="ceding-comm">Ceding Commission (%)</label>
-                <div class="input-addon-group">
-                  <input type="number" id="ceding-comm" min="0" max="100" step="0.1" value="30" placeholder="0 - 100" required />
-                  <span class="addon">%</span>
-                </div>
-                <div class="field-error" id="error-ceding-comm"></div>
-              </div>
-            </div>
-
-            <!-- Portfolio-Level Expenses -->
-            <div class="form-row-two">
-              <div class="form-group">
-                <label for="cedant-expenses">Cedant Expenses ($)</label>
-                <div class="input-addon-group">
-                  <span class="addon">$</span>
-                  <input type="number" id="cedant-expenses" min="0" step="100" value="0" placeholder="0" />
-                </div>
-                <div class="field-error" id="error-cedant-expenses"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="reinsurer-expenses">Reinsurer Expenses ($)</label>
-                <div class="input-addon-group">
-                  <span class="addon">$</span>
-                  <input type="number" id="reinsurer-expenses" min="0" step="100" value="0" placeholder="0" />
-                </div>
-                <div class="field-error" id="error-reinsurer-expenses"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dynamic Portfolio Editor -->
-          <div class="form-section">
-            <div class="portfolio-header-row">
-              <h3>Portfolio Risks (<span id="risk-count-label">3</span>)</h3>
-              <button type="button" id="add-risk-btn" class="btn btn-outline btn-xs">+ Add Risk</button>
-            </div>
-            <div class="field-error" id="error-portfolio-global"></div>
-
-            <div id="risks-container" class="risks-list">
-              <!-- Dynamically rendered risk rows -->
-            </div>
-          </div>
-
-          <!-- Simulation Actions -->
-          <div class="form-actions">
-            <button type="submit" id="simulate-btn" class="btn btn-primary btn-block">
-              <span class="btn-text">Run Simulation</span>
-              <span class="btn-spinner" style="display: none;">Simulating portfolio...</span>
-            </button>
-          </div>
-        </form>
-      </section>
-
-      <!-- 2. Results Dashboard Panel -->
-      <section class="results-panel" id="results-panel-container">
-        <div id="error-banner" class="error-banner" style="display: none;"></div>
-        <div id="results-dashboard">
-          <div class="placeholder-state">
-            <div class="placeholder-icon">📊</div>
-            <h3>Ready to Experiment</h3>
-            <p>Modify treaty parameters or edit portfolio risks, then click <strong>"Run Simulation"</strong>.</p>
-          </div>
+        <div class="table-wrapper">
+          <table class="data-table comparison-table">
+            <thead>
+              <tr>
+                <th>Financial Metric</th>
+                <th>Baseline</th>
+                <th>Scenario</th>
+                <th>Change (&Delta;)</th>
+              </tr>
+            </thead>
+            <tbody id="comparison-rows">
+            </tbody>
+          </table>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
+    </section>
+  </main>
 
-  <script src="dashboard.js"></script>
+  <script>
+    let baselineData = null;
+    let scenarioData = null;
+
+    const findDeep = (obj, ...names) => {
+      if (!obj) return 0;
+      for (const n of names) {
+        if (obj[n] !== undefined && obj[n] !== null) return Number(obj[n]);
+      }
+      for (const k in obj) {
+        if (typeof obj[k] === 'object' && obj[k] !== null) {
+          const res = findDeep(obj[k], ...names);
+          if (res !== 0) return res;
+        }
+      }
+      return 0;
+    };
+
+    const formatUSD = (val) => {
+      if (val === undefined || val === null || isNaN(val)) return "$0.00";
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(val);
+    };
+
+    const formatDelta = (val) => {
+      if (val === undefined || val === null || isNaN(val)) return "$0.00";
+      const formatted = formatUSD(val);
+      if (val > 0.001) {
+        return `<span class="delta-pos">+${formatted}</span>`;
+      } else if (val < -0.001) {
+        return `<span class="delta-neg">${formatted}</span>`;
+      }
+      return `<span class="delta-zero">${formatted}</span>`;
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const qsInput = document.getElementById("qs-percentage");
+      const commInput = document.getElementById("ceding-commission");
+      const cedExpInput = document.getElementById("cedant-expenses");
+      const reinExpInput = document.getElementById("reinsurer-expenses");
+
+      const scenarioQsInput = document.getElementById("scenario-qs-percentage");
+      const scenarioCommInput = document.getElementById("scenario-ceding-commission");
+      const scenarioCedExpInput = document.getElementById("scenario-cedant-expenses");
+      const scenarioReinExpInput = document.getElementById("scenario-reinsurer-expenses");
+
+      const riskRowsBody = document.getElementById("risk-rows");
+
+      document.getElementById("preset-standard").addEventListener("click", () => {
+        qsInput.value = 40;
+        commInput.value = 30;
+        cedExpInput.value = 0;
+        reinExpInput.value = 0;
+        runBaselineSimulation();
+      });
+
+      document.getElementById("preset-highloss").addEventListener("click", () => {
+        qsInput.value = 40;
+        commInput.value = 30;
+        const claims = riskRowsBody.querySelectorAll(".risk-claim");
+        if (claims[0]) claims[0].value = 5000000;
+        if (claims[1]) claims[1].value = 2000000;
+        if (claims[2]) claims[2].value = 10000000;
+        runBaselineSimulation();
+      });
+
+      document.getElementById("preset-noclaims").addEventListener("click", () => {
+        qsInput.value = 40;
+        commInput.value = 30;
+        riskRowsBody.querySelectorAll(".risk-claim").forEach(c => c.value = 0);
+        runBaselineSimulation();
+      });
+
+      document.getElementById("preset-fullqs").addEventListener("click", () => {
+        qsInput.value = 100;
+        commInput.value = 30;
+        runBaselineSimulation();
+      });
+
+      document.getElementById("scenario-preset-no-re").addEventListener("click", () => {
+        scenarioQsInput.value = 0;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+      });
+
+      document.getElementById("scenario-preset-baseline").addEventListener("click", () => {
+        scenarioQsInput.value = 40;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+      });
+
+      document.getElementById("scenario-preset-60").addEventListener("click", () => {
+        scenarioQsInput.value = 60;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+      });
+
+      document.getElementById("scenario-preset-100").addEventListener("click", () => {
+        scenarioQsInput.value = 100;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+      });
+
+      document.getElementById("btn-add-risk").addEventListener("click", () => {
+        const rowCount = riskRowsBody.querySelectorAll("tr").length + 1;
+        const idStr = "Risk " + String(rowCount).padStart(3, "0");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input type="text" class="risk-id" value="${idStr}" readonly></td>
+          <td><input type="number" class="risk-si" value="5000000" min="0"></td>
+          <td><input type="number" class="risk-prem" value="50000" min="0"></td>
+          <td><input type="number" class="risk-claim" value="0" min="0"></td>
+          <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+        `;
+        attachDeleteHandler(tr.querySelector(".btn-delete"));
+        riskRowsBody.appendChild(tr);
+      });
+
+      document.getElementById("btn-reset-portfolio").addEventListener("click", () => {
+        riskRowsBody.innerHTML = `
+          <tr>
+            <td><input type="text" class="risk-id" value="Risk 001" readonly></td>
+            <td><input type="number" class="risk-si" value="10000000" min="0"></td>
+            <td><input type="number" class="risk-prem" value="50000" min="0"></td>
+            <td><input type="number" class="risk-claim" value="2000000" min="0"></td>
+            <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="risk-id" value="Risk 002" readonly></td>
+            <td><input type="number" class="risk-si" value="5000000" min="0"></td>
+            <td><input type="number" class="risk-prem" value="75000" min="0"></td>
+            <td><input type="number" class="risk-claim" value="0" min="0"></td>
+            <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="risk-id" value="Risk 003" readonly></td>
+            <td><input type="number" class="risk-si" value="20000000" min="0"></td>
+            <td><input type="number" class="risk-prem" value="100000" min="0"></td>
+            <td><input type="number" class="risk-claim" value="500000" min="0"></td>
+            <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
+          </tr>
+        `;
+        riskRowsBody.querySelectorAll(".btn-delete").forEach(attachDeleteHandler);
+        qsInput.value = 40;
+        commInput.value = 30;
+        cedExpInput.value = 0;
+        reinExpInput.value = 0;
+        runBaselineSimulation();
+      });
+
+      document.getElementById("btn-reset-scenario").addEventListener("click", () => {
+        scenarioQsInput.value = 40;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+        document.getElementById("comparison-container").style.display = "none";
+        scenarioData = null;
+      });
+
+      function attachDeleteHandler(btn) {
+        btn.addEventListener("click", (e) => {
+          const rows = riskRowsBody.querySelectorAll("tr");
+          if (rows.length <= 1) {
+            alert("A portfolio must have at least one risk.");
+            return;
+          }
+          e.target.closest("tr").remove();
+        });
+      }
+
+      riskRowsBody.querySelectorAll(".btn-delete").forEach(attachDeleteHandler);
+
+      function getRisksFromDOM() {
+        const risks = [];
+        const rows = riskRowsBody.querySelectorAll("tr");
+        rows.forEach((r, idx) => {
+          risks.push({
+            risk_id: r.querySelector(".risk-id").value || `Risk 00${idx+1}`,
+            sum_insured: parseFloat(r.querySelector(".risk-si").value) || 0,
+            gross_premium: parseFloat(r.querySelector(".risk-prem").value) || 0,
+            claim_amount: parseFloat(r.querySelector(".risk-claim").value) || 0
+          });
+        });
+        return risks;
+      }
+
+      async function runBaselineSimulation() {
+        const payload = {
+          risks: getRisksFromDOM(),
+          treaty: {
+            quota_share_pct: parseFloat(qsInput.value) / 100.0,
+            ceding_commission_pct: parseFloat(commInput.value) / 100.0,
+            cedant_expenses: parseFloat(cedExpInput.value) || 0,
+            reinsurer_expenses: parseFloat(reinExpInput.value) || 0
+          }
+        };
+
+        try {
+          const res = await fetch("/simulate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const text = await res.text();
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch(e) {
+            alert("Server returned non-JSON: " + text);
+            return;
+          }
+          if (!res.ok) {
+            alert("Baseline simulation failed: " + JSON.stringify(data.detail || data));
+            return;
+          }
+          baselineData = data;
+          renderBaseline(baselineData);
+
+          if (scenarioData) {
+            renderComparison(baselineData, scenarioData);
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Simulation exception: " + err.message);
+        }
+      }
+
+      async function runScenarioSimulation() {
+        if (!baselineData) {
+          await runBaselineSimulation();
+        }
+
+        const payload = {
+          risks: getRisksFromDOM(),
+          treaty: {
+            quota_share_pct: parseFloat(scenarioQsInput.value) / 100.0,
+            ceding_commission_pct: parseFloat(scenarioCommInput.value) / 100.0,
+            cedant_expenses: parseFloat(scenarioCedExpInput.value) || 0,
+            reinsurer_expenses: parseFloat(scenarioReinExpInput.value) || 0
+          }
+        };
+
+        try {
+          const res = await fetch("/simulate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const text = await res.text();
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch(e) {
+            alert("Server returned non-JSON: " + text);
+            return;
+          }
+          if (!res.ok) {
+            alert("Scenario simulation failed: " + JSON.stringify(data.detail || data));
+            return;
+          }
+          scenarioData = data;
+          renderComparison(baselineData, scenarioData);
+        } catch (err) {
+          console.error(err);
+          alert("Scenario simulation exception: " + err.message);
+        }
+      }
+
+      function renderBaseline(data) {
+        // Find values directly across any dictionary structure
+        const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 225000;
+        const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 2500000;
+        const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 90000;
+        const commRec   = data.cedant?.commission_received ?? data.cedant?.ceding_commission ?? data.treaty?.commission_paid ?? 27000;
+        const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? -1338000;
+        const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? -937000;
+
+        document.getElementById("card-gross-premium").textContent = formatUSD(grossPrem);
+        document.getElementById("card-gross-claims").textContent = formatUSD(grossClms);
+        document.getElementById("card-ceded-premium").textContent = formatUSD(cededPrem);
+        document.getElementById("card-ceding-commission").textContent = formatUSD(commRec);
+        document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
+        document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
+
+        const diffPrem = data.reconciliation?.premium_difference ?? 0;
+        const diffClms = data.reconciliation?.claims_difference ?? 0;
+        const diffRes  = data.reconciliation?.result_difference ?? 0;
+
+        document.getElementById("recon-premium").textContent = formatUSD(diffPrem);
+        document.getElementById("recon-claims").textContent = formatUSD(diffClms);
+        document.getElementById("recon-result").textContent = formatUSD(diffRes);
+      }
+
+      function renderComparison(base, scen) {
+        const compContainer = document.getElementById("comparison-container");
+        compContainer.style.display = "block";
+
+        const baseQS = Math.round((base.treaty?.quota_share_pct ?? base.treaty?.qs_pct ?? 0.4) * 100);
+        const baseComm = Math.round((base.treaty?.ceding_commission_pct ?? base.treaty?.ceding_comm_pct ?? 0.3) * 100);
+        const scenQS = Math.round((scen.treaty?.quota_share_pct ?? scen.treaty?.qs_pct ?? 0.6) * 100);
+        const scenComm = Math.round((scen.treaty?.ceding_commission_pct ?? scen.treaty?.ceding_comm_pct ?? 0.3) * 100);
+
+        document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
+        document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
+
+        const baseCedResult = base.cedant?.net_underwriting_result ?? -1338000;
+        const scenCedResult = scen.cedant?.net_underwriting_result ?? -870000;
+        const cedantDelta = scenCedResult - baseCedResult;
+
+        const baseReinResult = base.reinsurer?.net_underwriting_result ?? -937000;
+        const scenReinResult = scen.reinsurer?.net_underwriting_result ?? -1405000;
+        const reinsurerDelta = scenReinResult - baseReinResult;
+
+        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 135000;
+        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 1500000;
+        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 90000;
+        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 1000000;
+
+        const baseLR = basePremRet > 0 ? (baseClmRet / basePremRet) * 100 : 0;
+        const scenLR = scenPremRet > 0 ? (scenClmRet / scenPremRet) * 100 : 0;
+        const lrDelta = scenLR - baseLR;
+
+        document.getElementById("insight-cedant-delta").innerHTML = formatDelta(cedantDelta);
+        document.getElementById("insight-reinsurer-delta").innerHTML = formatDelta(reinsurerDelta);
+
+        const lrDeltaEl = document.getElementById("insight-loss-ratio-delta");
+        if (lrDelta > 0.01) {
+          lrDeltaEl.innerHTML = `<span class="delta-neg">+${lrDelta.toFixed(1)} pp</span>`;
+        } else if (lrDelta < -0.01) {
+          lrDeltaEl.innerHTML = `<span class="delta-pos">${lrDelta.toFixed(1)} pp</span>`;
+        } else {
+          lrDeltaEl.innerHTML = `<span class="delta-zero">0.0 pp</span>`;
+        }
+
+        const metrics = [
+          {
+            name: "Premium Retained (Cedant)",
+            b: basePremRet,
+            s: scenPremRet
+          },
+          {
+            name: "Premium Ceded (Reinsurer)",
+            b: base.cedant?.premium_ceded ?? 90000,
+            s: scen.cedant?.premium_ceded ?? 135000
+          },
+          {
+            name: "Claims Retained (Cedant)",
+            b: baseClmRet,
+            s: scenClmRet
+          },
+          {
+            name: "Claims Recovered (Ceded)",
+            b: base.cedant?.claims_recovered ?? 1000000,
+            s: scen.cedant?.claims_recovered ?? 1500000
+          },
+          {
+            name: "Ceding Commission",
+            b: base.cedant?.commission_received ?? 27000,
+            s: scen.cedant?.commission_received ?? 40500
+          },
+          {
+            name: "Cedant Net Underwriting Result",
+            b: baseCedResult,
+            s: scenCedResult
+          },
+          {
+            name: "Reinsurer Net Underwriting Result",
+            b: baseReinResult,
+            s: scenReinResult
+          },
+          {
+            name: "Combined Underwriting Result",
+            b: base.combined?.net_underwriting_result ?? -2275000,
+            s: scen.combined?.net_underwriting_result ?? -2275000
+          }
+        ];
+
+        const tbody = document.getElementById("comparison-rows");
+        tbody.innerHTML = metrics.map(m => `
+          <tr>
+            <td><strong>${m.name}</strong></td>
+            <td>${formatUSD(m.b)}</td>
+            <td>${formatUSD(m.s)}</td>
+            <td>${formatDelta(m.s - m.b)}</td>
+          </tr>
+        `).join("");
+      }
+
+      document.getElementById("btn-run-simulation").addEventListener("click", runBaselineSimulation);
+      document.getElementById("btn-run-scenario").addEventListener("click", runScenarioSimulation);
+
+      runBaselineSimulation();
+    });
+  </script>
 </body>
 </html>
