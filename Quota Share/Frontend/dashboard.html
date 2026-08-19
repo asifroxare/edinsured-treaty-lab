@@ -303,6 +303,7 @@
       font-size: 0.85rem;
     }
 
+    /* Scenario Lab Section */
     .scenario-lab-section {
       border-left: 4px solid var(--accent);
     }
@@ -407,6 +408,86 @@
       color: #64748b;
     }
 
+    /* M5.3 Learning & Interpretation Layer */
+    .learning-layer-section {
+      margin-top: 24px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+    }
+
+    .learning-block {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .learning-block h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .learning-narrative {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .learning-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .edu-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .edu-card-header {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .edu-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .edu-card-body {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .educational-note {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary);
+      border-radius: 4px 8px 8px 4px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+      line-height: 1.5;
+    }
+
     @media (max-width: 768px) {
       .what-changed-banner {
         flex-direction: column;
@@ -415,6 +496,9 @@
       }
       .badge-arrow {
         display: none;
+      }
+      .learning-cards-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -599,6 +683,7 @@
       </div>
 
       <div class="comparison-container" id="comparison-container" style="display: none;">
+        <!-- Banner -->
         <div class="what-changed-banner" id="what-changed-banner">
           <div class="badge-item">
             <span class="badge-title">BASELINE</span>
@@ -611,6 +696,7 @@
           </div>
         </div>
 
+        <!-- M5.2 Insight Cards -->
         <div class="scenario-insights-grid">
           <div class="insight-card">
             <span class="insight-title">Cedant Underwriting Impact</span>
@@ -629,6 +715,7 @@
           </div>
         </div>
 
+        <!-- Comparison Table -->
         <div class="table-wrapper">
           <table class="data-table comparison-table">
             <thead>
@@ -643,6 +730,49 @@
             </tbody>
           </table>
         </div>
+
+        <!-- M5.3 Learning & Interpretation Layer -->
+        <div class="learning-layer-section">
+          <!-- Dynamic Directional Interpretation -->
+          <div class="learning-block">
+            <h4>💡 Why Did This Happen?</h4>
+            <p class="learning-narrative" id="learning-why-narrative"></p>
+          </div>
+
+          <!-- 5 Educational Concept Cards -->
+          <div class="learning-cards-grid">
+            <div class="edu-card">
+              <span class="edu-card-header">1. Risk Transfer</span>
+              <span class="edu-card-title">Proportional Exposure</span>
+              <p class="edu-card-body" id="edu-risk-transfer-text"></p>
+            </div>
+            <div class="edu-card">
+              <span class="edu-card-header">2. Premium Sharing</span>
+              <span class="edu-card-title">Ceded vs Retained Split</span>
+              <p class="edu-card-body" id="edu-premium-sharing-text"></p>
+            </div>
+            <div class="edu-card">
+              <span class="edu-card-header">3. Claim Sharing</span>
+              <span class="edu-card-title">Recovery Mechanics</span>
+              <p class="edu-card-body" id="edu-claim-sharing-text"></p>
+            </div>
+            <div class="edu-card">
+              <span class="edu-card-header">4. Commission Effect</span>
+              <span class="edu-card-title">Acquisition & Overhead</span>
+              <p class="edu-card-body" id="edu-commission-effect-text"></p>
+            </div>
+            <div class="edu-card">
+              <span class="edu-card-header">5. Economics & Trade-offs</span>
+              <span class="edu-card-title">Upside vs Downside Balance</span>
+              <p class="edu-card-body" id="edu-economics-tradeoff-text"></p>
+            </div>
+          </div>
+
+          <!-- Actuarial Learning Note -->
+          <div class="educational-note">
+            <strong>Learning Note:</strong> Quota Share changes how premium, claims, and commissions are shared proportionally. Whether a higher or lower QS is preferable depends on the primary insurer's risk appetite, capital solvency requirements, pricing accuracy, and overall treaty expense terms.
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -650,20 +780,6 @@
   <script>
     let baselineData = null;
     let scenarioData = null;
-
-    const findDeep = (obj, ...names) => {
-      if (!obj) return 0;
-      for (const n of names) {
-        if (obj[n] !== undefined && obj[n] !== null) return Number(obj[n]);
-      }
-      for (const k in obj) {
-        if (typeof obj[k] === 'object' && obj[k] !== null) {
-          const res = findDeep(obj[k], ...names);
-          if (res !== 0) return res;
-        }
-      }
-      return 0;
-    };
 
     const formatUSD = (val) => {
       if (val === undefined || val === null || isNaN(val)) return "$0.00";
@@ -699,6 +815,7 @@
 
       const riskRowsBody = document.getElementById("risk-rows");
 
+      // Presets - Baseline
       document.getElementById("preset-standard").addEventListener("click", () => {
         qsInput.value = 40;
         commInput.value = 30;
@@ -730,6 +847,7 @@
         runBaselineSimulation();
       });
 
+      // Presets - Scenario
       document.getElementById("scenario-preset-no-re").addEventListener("click", () => {
         scenarioQsInput.value = 0;
         scenarioCommInput.value = 30;
@@ -758,6 +876,7 @@
         scenarioReinExpInput.value = 0;
       });
 
+      // Add Risk Row
       document.getElementById("btn-add-risk").addEventListener("click", () => {
         const rowCount = riskRowsBody.querySelectorAll("tr").length + 1;
         const idStr = "Risk " + String(rowCount).padStart(3, "0");
@@ -773,6 +892,7 @@
         riskRowsBody.appendChild(tr);
       });
 
+      // Reset Portfolio
       document.getElementById("btn-reset-portfolio").addEventListener("click", () => {
         riskRowsBody.innerHTML = `
           <tr>
@@ -805,6 +925,7 @@
         runBaselineSimulation();
       });
 
+      // Reset Scenario
       document.getElementById("btn-reset-scenario").addEventListener("click", () => {
         scenarioQsInput.value = 40;
         scenarioCommInput.value = 30;
@@ -924,7 +1045,6 @@
       }
 
       function renderBaseline(data) {
-        // Find values directly across any dictionary structure
         const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 225000;
         const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 2500000;
         const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 90000;
@@ -1041,6 +1161,87 @@
             <td>${formatDelta(m.s - m.b)}</td>
           </tr>
         `).join("");
+
+        // Render M5.3 Learning Insights
+        generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm);
+      }
+
+      function generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm) {
+        const baseCedExp = base.treaty?.cedant_expenses ?? 0;
+        const scenCedExp = scen.treaty?.cedant_expenses ?? 0;
+        const baseReinExp = base.treaty?.reinsurer_expenses ?? 0;
+        const scenReinExp = scen.treaty?.reinsurer_expenses ?? 0;
+
+        // 1. "Why Did This Happen?" Narrative
+        const whyNarratives = [];
+
+        if (scenQS > baseQS) {
+          whyNarratives.push(`<strong>Quota Share increased from ${baseQS}% to ${scenQS}%:</strong> A larger proportion of the portfolio is transferred to the reinsurer. This increases ceded premium and ceded claims while reducing the amounts retained by the cedant.`);
+        } else if (scenQS < baseQS) {
+          whyNarratives.push(`<strong>Quota Share decreased from ${baseQS}% to ${scenQS}%:</strong> The cedant retains a larger proportion of the original portfolio, keeping more gross premium while assuming greater exposure to incurred losses.`);
+        } else {
+          whyNarratives.push(`<strong>Quota Share remained unchanged at ${baseQS}%:</strong> Proportional sharing of premiums and claims between cedant and reinsurer is held constant.`);
+        }
+
+        if (scenComm > baseComm) {
+          whyNarratives.push(`<strong>Ceding Commission increased from ${baseComm}% to ${scenComm}%:</strong> The reinsurer pays a higher fee back to the cedant for underwriting the business, directly improving the cedant's net result while increasing reinsurer costs.`);
+        } else if (scenComm < baseComm) {
+          whyNarratives.push(`<strong>Ceding Commission decreased from ${baseComm}% to ${scenComm}%:</strong> The cedant receives less commission reimbursement, reducing cedant net income and lowering reinsurer acquisition costs.`);
+        }
+
+        if (scenCedExp !== baseCedExp) {
+          const dir = scenCedExp > baseCedExp ? "increased" : "decreased";
+          whyNarratives.push(`<strong>Cedant Expenses ${dir}:</strong> Directly impacts the cedant's net result without altering the reinsurer's financial share.`);
+        }
+
+        if (scenReinExp !== baseReinExp) {
+          const dir = scenReinExp > baseReinExp ? "increased" : "decreased";
+          whyNarratives.push(`<strong>Reinsurer Expenses ${dir}:</strong> Directly impacts reinsurer administrative costs without altering the cedant's financial terms.`);
+        }
+
+        document.getElementById("learning-why-narrative").innerHTML = whyNarratives.join("<br><br>");
+
+        // 2. Educational Concept Card 1: Risk Transfer
+        const riskEl = document.getElementById("edu-risk-transfer-text");
+        if (scenQS > baseQS) {
+          riskEl.textContent = `By ceding ${scenQS}% (up from ${baseQS}%), the cedant transfers more aggregate liability to the reinsurer, lowering the cedant's volatility and maximum potential dollar loss.`;
+        } else if (scenQS < baseQS) {
+          riskEl.textContent = `By ceding ${scenQS}% (down from ${baseQS}%), the cedant retains more liability on its own balance sheet, increasing its exposure to major portfolio losses.`;
+        } else {
+          riskEl.textContent = `Risk transfer is stable at ${baseQS}%. The reinsurer absorbs exactly ${baseQS}% of every covered risk.`;
+        }
+
+        // 3. Educational Concept Card 2: Premium Sharing
+        const premEl = document.getElementById("edu-premium-sharing-text");
+        if (scenQS > baseQS) {
+          premEl.textContent = `The cedant gives up a larger share of gross premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)} vs ${formatUSD(base.cedant?.premium_ceded ?? 0)} baseline) in exchange for reinsurance protection.`;
+        } else if (scenQS < baseQS) {
+          premEl.textContent = `The cedant keeps a higher share of gross premium (${formatUSD(scen.cedant?.premium_retained ?? 0)} vs ${formatUSD(base.cedant?.premium_retained ?? 0)} baseline), preserving more top-line revenue.`;
+        } else {
+          premEl.textContent = `Gross premium is shared strictly in proportion to the ${baseQS}% treaty percentage.`;
+        }
+
+        // 4. Educational Concept Card 3: Claim Sharing
+        const clmEl = document.getElementById("edu-claim-sharing-text");
+        if (scenQS > baseQS) {
+          clmEl.textContent = `Incurred claims are heavily mitigated for the cedant: the reinsurer absorbs ${formatUSD(scen.cedant?.claims_recovered ?? 0)} of losses (up from ${formatUSD(base.cedant?.claims_recovered ?? 0)}).`;
+        } else if (scenQS < baseQS) {
+          clmEl.textContent = `The cedant absorbs more direct losses (${formatUSD(scen.cedant?.claims_retained ?? 0)} retained vs ${formatUSD(base.cedant?.claims_retained ?? 0)} baseline).`;
+        } else {
+          clmEl.textContent = `Every claim in the portfolio is split proportionally (${100 - baseQS}% cedant / ${baseQS}% reinsurer).`;
+        }
+
+        // 5. Educational Concept Card 4: Commission Effect
+        const commEl = document.getElementById("edu-commission-effect-text");
+        if (scenComm !== baseComm || scenQS !== baseQS) {
+          commEl.textContent = `The cedant earns ${formatUSD(scen.cedant?.commission_received ?? 0)} in commission on ceded business, helping offset initial policy acquisition and operating expenses.`;
+        } else {
+          commEl.textContent = `Commission remains proportional at ${baseComm}%, returning ${formatUSD(scen.cedant?.commission_received ?? 0)} to the cedant.`;
+        }
+
+        // 6. Educational Concept Card 5: Profitability & Trade-offs
+        const ecoEl = document.getElementById("edu-economics-tradeoff-text");
+        ecoEl.textContent = `Quota Share does not only transfer losses—it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
       }
 
       document.getElementById("btn-run-simulation").addEventListener("click", runBaselineSimulation);
