@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EdInsured Treaty Lab — Quota Share Simulator</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1>EdInsured Treaty Lab</h1>
+        <p class="subtitle">Quota Share Treaty Simulator (M4.4)</p>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <!-- Configuration Panel -->
+      <section class="config-panel">
+        <h2>1. Configure Simulation</h2>
+        
+        <form id="simulation-form">
+          <div class="form-section">
+            <h3>Treaty Parameters</h3>
+            <div class="form-group">
+              <label for="quota-share">Quota Share Cession (%)</label>
+              <input type="number" id="quota-share" min="0" max="100" step="0.1" value="40" required />
+            </div>
+            <div class="form-group">
+              <label for="ceding-comm">Ceding Commission (%)</label>
+              <input type="number" id="ceding-comm" min="0" max="100" step="0.1" value="30" required />
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Portfolio Risks</h3>
+            <div id="risks-container">
+              <!-- Risk 1 -->
+              <div class="risk-entry-card" data-risk-index="0">
+                <div class="risk-title">Risk 001</div>
+                <div class="risk-inputs">
+                  <label>Sum Insured ($)</label>
+                  <input type="number" class="risk-si" value="10000000" required />
+                  <label>Premium ($)</label>
+                  <input type="number" class="risk-prem" value="50000" required />
+                  <label>Claim ($)</label>
+                  <input type="number" class="risk-claim" value="2000000" required />
+                </div>
+              </div>
+
+              <!-- Risk 2 -->
+              <div class="risk-entry-card" data-risk-index="1">
+                <div class="risk-title">Risk 002</div>
+                <div class="risk-inputs">
+                  <label>Sum Insured ($)</label>
+                  <input type="number" class="risk-si" value="5000000" required />
+                  <label>Premium ($)</label>
+                  <input type="number" class="risk-prem" value="75000" required />
+                  <label>Claim ($)</label>
+                  <input type="number" class="risk-claim" value="0" required />
+                </div>
+              </div>
+
+              <!-- Risk 3 -->
+              <div class="risk-entry-card" data-risk-index="2">
+                <div class="risk-title">Risk 003</div>
+                <div class="risk-inputs">
+                  <label>Sum Insured ($)</label>
+                  <input type="number" class="risk-si" value="20000000" required />
+                  <label>Premium ($)</label>
+                  <input type="number" class="risk-prem" value="100000" required />
+                  <label>Claim ($)</label>
+                  <input type="number" class="risk-claim" value="500000" required />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="simulate-btn" class="btn btn-primary">Run Simulation</button>
+        </form>
+      </section>
+
+      <!-- Results Dashboard Panel -->
+      <section class="results-panel">
+        <div id="error-banner" class="error-banner" style="display: none;"></div>
+        <div id="results-dashboard">
+          <div class="placeholder-state">
+            <h3>Ready to Simulate</h3>
+            <p>Click <strong>"Run Simulation"</strong> to execute the Quota Share calculations and inspect the results.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
