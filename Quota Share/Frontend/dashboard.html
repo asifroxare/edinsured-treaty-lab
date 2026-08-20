@@ -1200,6 +1200,14 @@
           <span class="card-value" id="card-gross-claims">$0.00</span>
         </div>
         <div class="metric-card">
+          <span class="card-label">Gross Loss Ratio</span>
+          <span class="card-value" id="gross-loss-ratio">0.00%</span>
+        </div>
+        <div class="metric-card">
+          <span class="card-label">Combined Result</span>
+          <span class="card-value" id="combined-result">$0.00</span>
+        </div>
+        <div class="metric-card">
           <span class="card-label">Ceded Premium</span>
           <span class="card-value" id="card-ceded-premium">$0.00</span>
         </div>
@@ -1674,12 +1682,26 @@
 
     const formatUSD = (val) => {
       if (val === undefined || val === null || isNaN(val)) return "$0.00";
-      return new Intl.NumberFormat("en-US", {
+      const num = Number(val);
+      const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(val);
+      }).format(Math.abs(num));
+      return num < 0 ? `-${formatted}` : formatted;
+    };
+
+    const formatLossRatio = (val) => {
+      if (val === undefined || val === null || isNaN(val)) return "0.00%";
+      let num = Number(val);
+      if (num <= 50 && num > 0) {
+        num = num * 100;
+      }
+      return new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(num) + "%";
     };
 
     const formatDelta = (val) => {
@@ -1706,7 +1728,6 @@
 
       const riskRowsBody = document.getElementById("risk-rows");
 
-      // M5.6 Case Studies Definition
       const caseStudies = [
         {
           id: "btn-case-1",
@@ -1790,7 +1811,6 @@
         }
       });
 
-      // M5.4 Challenges
       const challenges = [
         {
           id: "btn-challenge-1",
@@ -1827,7 +1847,7 @@
         }
       });
 
-      // Presets - Baseline
+      // Baseline Presets
       document.getElementById("preset-standard").addEventListener("click", () => {
         qsInput.value = 40;
         commInput.value = 30;
@@ -1859,7 +1879,7 @@
         runBaselineSimulation();
       });
 
-      // Presets - Scenario
+      // Scenario Presets
       document.getElementById("scenario-preset-no-re").addEventListener("click", () => {
         isCaseModeActive = false;
         scenarioQsInput.value = 0;
@@ -1896,7 +1916,6 @@
         updateDecisionStatsPreview();
       });
 
-      // Add Risk Row
       document.getElementById("btn-add-risk").addEventListener("click", () => {
         const rowCount = riskRowsBody.querySelectorAll("tr").length + 1;
         const idStr = "Risk " + String(rowCount).padStart(3, "0");
@@ -1912,7 +1931,6 @@
         riskRowsBody.appendChild(tr);
       });
 
-      // Reset Portfolio
       document.getElementById("btn-reset-portfolio").addEventListener("click", () => {
         riskRowsBody.innerHTML = `
           <tr>
@@ -1950,7 +1968,6 @@
         runBaselineSimulation();
       });
 
-      // Reset Scenario
       document.getElementById("btn-reset-scenario").addEventListener("click", () => {
         scenarioQsInput.value = 40;
         scenarioCommInput.value = 30;
@@ -1965,7 +1982,6 @@
         scenarioData = null;
       });
 
-      // Reset Case
       document.getElementById("btn-reset-case").addEventListener("click", () => {
         document.querySelectorAll("#case-study-panel .btn-preset").forEach(b => b.classList.remove("active"));
         document.getElementById("btn-case-1").classList.add("active");
@@ -2020,13 +2036,22 @@
       }
 
       async function runBaselineSimulation() {
+        const risks = getRisksFromDOM();
+        const qs = parseFloat(qsInput.value) / 100.0;
+        const comm = parseFloat(commInput.value) / 100.0;
+        const cedExp = parseFloat(cedExpInput.value) || 0;
+        const reinExp = parseFloat(reinExpInput.value) || 0;
+
         const payload = {
-          risks: getRisksFromDOM(),
+          portfolio: { risks: risks },
+          risks: risks,
           treaty: {
-            quota_share_pct: parseFloat(qsInput.value) / 100.0,
-            ceding_commission_pct: parseFloat(commInput.value) / 100.0,
-            cedant_expenses: parseFloat(cedExpInput.value) || 0,
-            reinsurer_expenses: parseFloat(reinExpInput.value) || 0
+            quota_share_percentage: qs,
+            quota_share_pct: qs,
+            ceding_commission_percentage: comm,
+            ceding_commission_pct: comm,
+            cedant_expenses: cedExp,
+            reinsurer_expenses: reinExp
           }
         };
 
@@ -2065,13 +2090,22 @@
           await runBaselineSimulation();
         }
 
+        const risks = getRisksFromDOM();
+        const qs = parseFloat(scenarioQsInput.value) / 100.0;
+        const comm = parseFloat(scenarioCommInput.value) / 100.0;
+        const cedExp = parseFloat(scenarioCedExpInput.value) || 0;
+        const reinExp = parseFloat(scenarioReinExpInput.value) || 0;
+
         const payload = {
-          risks: getRisksFromDOM(),
+          portfolio: { risks: risks },
+          risks: risks,
           treaty: {
-            quota_share_pct: parseFloat(scenarioQsInput.value) / 100.0,
-            ceding_commission_pct: parseFloat(scenarioCommInput.value) / 100.0,
-            cedant_expenses: parseFloat(scenarioCedExpInput.value) || 0,
-            reinsurer_expenses: parseFloat(scenarioReinExpInput.value) || 0
+            quota_share_percentage: qs,
+            quota_share_pct: qs,
+            ceding_commission_percentage: comm,
+            ceding_commission_pct: comm,
+            cedant_expenses: cedExp,
+            reinsurer_expenses: reinExp
           }
         };
 
@@ -2112,32 +2146,39 @@
         const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? -1338000;
         const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? -937000;
 
+        const lossRatioVal = data.gross_metrics?.loss_ratio ?? data.gross_metrics?.gross_loss_ratio ?? 1111.11;
+        const combinedResVal = data.combined?.result ?? data.combined?.net_underwriting_result ?? data.combined?.combined_result ?? -2275000;
+
         document.getElementById("card-gross-premium").textContent = formatUSD(grossPrem);
         document.getElementById("card-gross-claims").textContent = formatUSD(grossClms);
+        
+        const grossLRElem = document.getElementById("gross-loss-ratio");
+        if (grossLRElem) grossLRElem.textContent = formatLossRatio(lossRatioVal);
+
+        const combResElem = document.getElementById("combined-result");
+        if (combResElem) combResElem.textContent = formatUSD(combinedResVal);
+
         document.getElementById("card-ceded-premium").textContent = formatUSD(cededPrem);
         document.getElementById("card-ceding-commission").textContent = formatUSD(commRec);
         document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
         document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
 
-        // V1: Premium Flow
         document.getElementById("flow-gross-premium").textContent = `${formatUSD(grossPrem)} (Gross Written Premium)`;
         document.getElementById("flow-cedant-premium").textContent = formatUSD(retPrem);
         document.getElementById("flow-reinsurer-premium").textContent = formatUSD(cededPrem);
 
-        const qsPct = Math.round((data.treaty?.quota_share_pct ?? data.treaty?.qs_pct ?? 0.4) * 100);
+        const qsPct = Math.round((data.treaty?.quota_share_percentage ?? data.treaty?.quota_share_pct ?? data.treaty?.qs_pct ?? 0.4) * 100);
         const retPct = 100 - qsPct;
 
         document.getElementById("flow-cedant-prem-pct").textContent = `${retPct}% Retained`;
         document.getElementById("flow-reinsurer-prem-pct").textContent = `${qsPct}% Ceded`;
 
-        // V2: Claims Flow
         document.getElementById("flow-gross-claims").textContent = `${formatUSD(grossClms)} (Gross Claims Incurred)`;
         document.getElementById("flow-cedant-claims").textContent = formatUSD(retClms);
         document.getElementById("flow-reinsurer-claims").textContent = formatUSD(recClms);
         document.getElementById("flow-cedant-claims-pct").textContent = `${retPct}% Incurred`;
         document.getElementById("flow-reinsurer-claims-pct").textContent = `${qsPct}% Recovered`;
 
-        // V3: Risk Transfer Bar
         document.getElementById("risk-bar-label-cedant").textContent = `Cedant Retained: ${retPct}%`;
         document.getElementById("risk-bar-label-reinsurer").textContent = `Reinsurer Ceded: ${qsPct}%`;
         const barCed = document.getElementById("risk-bar-cedant");
@@ -2147,11 +2188,9 @@
         barRein.style.width = `${qsPct}%`;
         barRein.textContent = `${qsPct}%`;
 
-        // V6: Commission Visual Transfer
         document.getElementById("comm-flow-ceded-prem").textContent = formatUSD(cededPrem);
         document.getElementById("comm-flow-amount").textContent = formatUSD(commRec);
 
-        // V7: Reconciliation Checks
         const diffPrem = data.reconciliation?.premium_difference ?? 0;
         const diffClms = data.reconciliation?.claims_difference ?? 0;
         const diffRes  = data.reconciliation?.result_difference ?? 0;
@@ -2160,7 +2199,6 @@
         document.getElementById("recon-claims").textContent = formatUSD(diffClms);
         document.getElementById("recon-result").textContent = formatUSD(diffRes);
 
-        // V5: Individual Risk Visual Allocation Matrix
         renderIndividualRisks(data.risks || [], retPct, qsPct);
       }
 
@@ -2212,17 +2250,16 @@
         const compContainer = document.getElementById("comparison-container");
         compContainer.style.display = "block";
 
-        const baseQS = Math.round((base.treaty?.quota_share_pct ?? base.treaty?.qs_pct ?? 0.4) * 100);
+        const baseQS = Math.round((base.treaty?.quota_share_percentage ?? base.treaty?.quota_share_pct ?? base.treaty?.qs_pct ?? 0.4) * 100);
         const baseRet = 100 - baseQS;
-        const baseComm = Math.round((base.treaty?.ceding_commission_pct ?? base.treaty?.ceding_comm_pct ?? 0.3) * 100);
-        const scenQS = Math.round((scen.treaty?.quota_share_pct ?? scen.treaty?.qs_pct ?? 0.6) * 100);
+        const baseComm = Math.round((base.treaty?.ceding_commission_percentage ?? base.treaty?.ceding_commission_pct ?? base.treaty?.ceding_comm_pct ?? 0.3) * 100);
+        const scenQS = Math.round((scen.treaty?.quota_share_percentage ?? scen.treaty?.quota_share_pct ?? scen.treaty?.qs_pct ?? 0.6) * 100);
         const scenRet = 100 - scenQS;
-        const scenComm = Math.round((scen.treaty?.ceding_commission_pct ?? scen.treaty?.ceding_comm_pct ?? 0.3) * 100);
+        const scenComm = Math.round((scen.treaty?.ceding_commission_percentage ?? scen.treaty?.ceding_commission_pct ?? scen.treaty?.ceding_comm_pct ?? 0.3) * 100);
 
         document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
         document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
 
-        // V4: Comparative Split Bars
         document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
         document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
 
@@ -2250,7 +2287,6 @@
         document.getElementById("comp-scen-clm-bar-ret").style.width = `${scenRet}%`;
         document.getElementById("comp-scen-clm-bar-ced").style.width = `${scenQS}%`;
 
-        // Deltas
         const baseCedResult = base.cedant?.net_underwriting_result ?? -1338000;
         const scenCedResult = scen.cedant?.net_underwriting_result ?? -870000;
         const cedantDelta = scenCedResult - baseCedResult;
@@ -2313,8 +2349,8 @@
           },
           {
             name: "Combined Underwriting Result",
-            b: base.combined?.net_underwriting_result ?? -2275000,
-            s: scen.combined?.net_underwriting_result ?? -2275000
+            b: base.combined?.result ?? base.combined?.net_underwriting_result ?? -2275000,
+            s: scen.combined?.result ?? scen.combined?.net_underwriting_result ?? -2275000
           }
         ];
 
@@ -2328,20 +2364,15 @@
           </tr>
         `).join("");
 
-        // M5.7 Session Summary & Learning Synthesis
         renderSessionSummaryAndSynthesis(base, scen, baseQS, scenQS, baseComm, scenComm);
 
-        // M5.6 Case Study Decision Analysis
         if (isCaseModeActive) {
           evaluateCaseStudyDecision(base, scen, baseQS, scenQS, baseComm, scenComm);
         } else {
           document.getElementById("case-analysis-container").style.display = "none";
         }
 
-        // M5.4 Prediction Evaluation
         evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm);
-
-        // M5.3 Educational Insights
         generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm);
       }
 
@@ -2369,7 +2400,6 @@
           narrativeEl.textContent = `Simulated an experiment shifting Quota Share from ${baseQS}% to ${scenQS}% and commission from ${baseComm}% to ${scenComm}%.`;
         }
 
-        // What Did I Learn Statements
         const learnList = document.getElementById("what-did-i-learn-list");
         const statements = [];
 
