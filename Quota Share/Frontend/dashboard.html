@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EdInsured Treaty Lab — Quota Share Simulator</title>
+  <title>EdInsured Treaty Lab â€” Quota Share Simulator</title>
   <style>
     :root {
       --primary: #0284c7;
@@ -320,7 +320,6 @@
       justify-content: space-between;
     }
 
-    /* Flow Diagrams */
     .flow-root-card {
       background: #ffffff;
       border: 1px solid #cbd5e1;
@@ -386,7 +385,6 @@
       color: var(--text-muted);
     }
 
-    /* Risk Transfer Bar */
     .risk-bar-container {
       display: flex;
       flex-direction: column;
@@ -433,7 +431,6 @@
       font-weight: 700;
     }
 
-    /* Commission Flow Visual */
     .commission-flow-box {
       display: flex;
       align-items: center;
@@ -457,7 +454,6 @@
       font-weight: bold;
     }
 
-    /* Reconciliation Flow */
     .recon-flow-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -482,7 +478,6 @@
       font-size: 1rem;
     }
 
-    /* Individual Risk Visual Allocation Matrix */
     .risk-visual-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -517,7 +512,6 @@
       margin-top: 2px;
     }
 
-    /* Comparative Baseline vs Scenario Visual Bars */
     .comparative-bars-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -559,6 +553,125 @@
     /* Scenario Lab Section */
     .scenario-lab-section {
       border-left: 4px solid var(--accent);
+    }
+
+    /* M5.6 Case Study Section Styles */
+    .case-study-panel {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .case-badge-diff {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .diff-beginner {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .diff-intermediate {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .diff-advanced {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .case-detail-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .case-situation-text {
+      font-size: 0.9rem;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    .case-decision-preview {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      gap: 10px;
+    }
+
+    .case-decision-stats {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e3a8a;
+    }
+
+    .case-analysis-container {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tradeoff-card {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .tradeoff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .reflection-box {
+      background: #fdf4ff;
+      border: 1px solid #f0abfc;
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+
+    .reflection-box h5 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #86198f;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .reflection-box ul {
+      margin-left: 20px;
+      font-size: 0.85rem;
+      color: #701a75;
+      line-height: 1.5;
     }
 
     .challenge-panel {
@@ -783,7 +896,6 @@
       color: #64748b;
     }
 
-    /* M5.3 / M5.4 Learning Layer */
     .learning-layer-section {
       margin-top: 24px;
       border-top: 1px solid var(--border-color);
@@ -884,6 +996,9 @@
       .flow-branches-grid {
         grid-template-columns: 1fr;
       }
+      .tradeoff-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -974,10 +1089,10 @@
       </div>
     </section>
 
-    <!-- 2. BASELINE SUMMARY & M5.5 VISUAL ANALYTICS -->
+    <!-- 2. BASELINE SUMMARY & VISUAL ANALYTICS -->
     <section class="section-card" id="results-section">
       <h2>2. Baseline Financial Summary & Visual Analytics</h2>
-      <!-- Primary Metric Cards -->
+
       <div class="metrics-grid">
         <div class="metric-card">
           <span class="card-label">Gross Written Premium</span>
@@ -1005,13 +1120,12 @@
         </div>
       </div>
 
-      <!-- M5.5 Visual Analytics Grid -->
       <div class="visual-analytics-grid">
-        <!-- V1: Premium Flow Diagram -->
+        <!-- V1: Premium Flow -->
         <div class="visual-box">
-          <h3>💰 Premium Money Flow</h3>
+          <h3>ðŸ’° Premium Money Flow</h3>
           <div class="flow-root-card" id="flow-gross-premium">$0.00 (Gross Premium)</div>
-          <div class="flow-connector">│<br>▼</div>
+          <div class="flow-connector">â”‚<br>â–¼</div>
           <div class="flow-branches-grid">
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Retained</span>
@@ -1026,11 +1140,11 @@
           </div>
         </div>
 
-        <!-- V2: Claims Flow Diagram -->
+        <!-- V2: Claims Flow -->
         <div class="visual-box">
-          <h3>🛡️ Claims Recovery Flow</h3>
+          <h3>ðŸ›¡ï¸ Claims Recovery Flow</h3>
           <div class="flow-root-card" id="flow-gross-claims">$0.00 (Gross Claims)</div>
-          <div class="flow-connector">│<br>▼</div>
+          <div class="flow-connector">â”‚<br>â–¼</div>
           <div class="flow-branches-grid">
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Incurred</span>
@@ -1045,9 +1159,9 @@
           </div>
         </div>
 
-        <!-- V3: Risk Transfer Proportional Bar -->
+        <!-- V3: Risk Transfer Bar & V6 Commission -->
         <div class="visual-box">
-          <h3>⚖️ Risk Transfer Split</h3>
+          <h3>âš–ï¸ Risk Transfer Split</h3>
           <div class="risk-bar-container">
             <div class="risk-bar-labels">
               <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 60%</span>
@@ -1059,7 +1173,6 @@
             </div>
           </div>
 
-          <!-- V6: Ceding Commission Flow -->
           <div style="margin-top: 8px;">
             <div class="branch-title" style="margin-bottom: 6px;">Ceding Commission Transfer</div>
             <div class="commission-flow-box">
@@ -1083,21 +1196,21 @@
 
         <!-- V7: Enhanced Reconciliation Visual Flow -->
         <div class="visual-box">
-          <h3>✅ System Reconciliation & Integrity</h3>
+          <h3>âœ… System Reconciliation & Integrity</h3>
           <div class="recon-flow-grid">
             <div class="recon-flow-card">
               <span class="branch-title">Premium Split</span>
-              <span class="recon-check">✓ Balanced</span>
+              <span class="recon-check">âœ“ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-premium">$0.00</strong></span>
             </div>
             <div class="recon-flow-card">
               <span class="branch-title">Claims Split</span>
-              <span class="recon-check">✓ Balanced</span>
+              <span class="recon-check">âœ“ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-claims">$0.00</strong></span>
             </div>
             <div class="recon-flow-card">
               <span class="branch-title">Result Split</span>
-              <span class="recon-check">✓ Balanced</span>
+              <span class="recon-check">âœ“ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-result">$0.00</strong></span>
             </div>
           </div>
@@ -1106,19 +1219,18 @@
 
       <!-- V5: Individual Risk Allocation Matrix -->
       <div style="margin-top: 10px;">
-        <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">📋 Individual Policy Allocations (from Portfolio)</h3>
+        <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;">ðŸ“‹ Individual Policy Allocations (from Portfolio)</h3>
         <div class="risk-visual-grid" id="individual-risks-container">
-          <!-- Dynamically populated from result.risks -->
         </div>
       </div>
     </section>
 
-    <!-- 3. SCENARIO LAB & CHALLENGE MODE -->
+    <!-- 3. SCENARIO LAB & M5.6 CASE STUDY DECISION MODE -->
     <section class="section-card scenario-lab-section" id="scenario-section">
       <div class="section-header">
         <div>
-          <h2>3. Scenario Lab (Controlled Experiments & Visual Analytics)</h2>
-          <p class="section-subtext">Formulate hypotheses, adjust treaty terms, and compare predicted vs actual underwriting results.</p>
+          <h2>3. Scenario Lab & Case Study Simulation</h2>
+          <p class="section-subtext">Select real-world case studies, make strategic treaty decisions, and evaluate underwriting trade-offs.</p>
         </div>
         <div class="preset-group">
           <span class="preset-label">Scenario Presets:</span>
@@ -1129,10 +1241,45 @@
         </div>
       </div>
 
+      <!-- M5.6 Case Study Mode Panel -->
+      <div class="case-study-panel" id="case-study-panel">
+        <div class="challenge-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="challenge-title">ðŸ’¼ Case Study Simulation</span>
+            <span class="case-badge-diff diff-beginner" id="case-diff-badge">BEGINNER</span>
+          </div>
+          <div class="preset-group">
+            <button type="button" class="btn btn-preset active" id="btn-case-1">Case 1: Capital Pressure</button>
+            <button type="button" class="btn btn-preset" id="btn-case-2">Case 2: Retain Upside</button>
+            <button type="button" class="btn btn-preset" id="btn-case-3">Case 3: Commission Negotiation</button>
+          </div>
+        </div>
+
+        <div class="case-detail-box">
+          <div><strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Business Situation:</strong></div>
+          <p class="case-situation-text" id="case-situation-desc">
+            The board of directors is concerned about capital solvency and potential catastrophic portfolio losses. Regulators require higher solvency margin relief, demanding substantial risk transfer to reinsurers.
+          </p>
+          <div style="margin-top: 4px;"><strong style="color: var(--accent); font-size: 0.8rem; text-transform: uppercase;">Strategic Objective:</strong> <span id="case-objective-desc" style="font-size: 0.85rem; color: #334155;">Increase proportional risk transfer to alleviate balance sheet pressure.</span></div>
+        </div>
+
+        <!-- Student Decision Preview Bar -->
+        <div class="case-decision-preview">
+          <div>
+            <span style="font-size: 0.75rem; color: #1e3a8a; text-transform: uppercase; font-weight: 700;">YOUR TREATY DECISION:</span>
+            <span class="case-decision-stats" id="case-decision-stats-txt">60% QS | 30% Commission | $0 Expenses</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-outline" id="btn-reset-case" style="padding: 4px 10px; font-size: 0.8rem;">Reset Case</button>
+            <button type="button" class="btn btn-accent" id="btn-run-case" style="padding: 4px 14px; font-size: 0.8rem;">RUN CASE</button>
+          </div>
+        </div>
+      </div>
+
       <!-- M5.4 Educational Challenge Selector -->
       <div class="challenge-panel">
         <div class="challenge-header">
-          <span class="challenge-title">🎯 Scenario Challenge</span>
+          <span class="challenge-title">ðŸŽ¯ Scenario Challenge</span>
           <div class="preset-group">
             <button type="button" class="btn btn-preset active" id="btn-challenge-1">Challenge 1: Increase Risk Transfer</button>
             <button type="button" class="btn btn-preset" id="btn-challenge-2">Challenge 2: Retain More Exposure</button>
@@ -1166,7 +1313,7 @@
 
       <!-- M5.4 Student Prediction Panel (Before You Run) -->
       <div class="prediction-panel" id="prediction-panel">
-        <h4>🤔 Before You Run: What do you predict will happen?</h4>
+        <h4>ðŸ¤” Before You Run: What do you predict will happen?</h4>
         <p>Select your hypotheses regarding how this scenario will alter portfolio economics:</p>
         <div class="prediction-options-grid">
           <label class="prediction-label">
@@ -1205,6 +1352,30 @@
       </div>
 
       <div class="comparison-container" id="comparison-container" style="display: none;">
+        <!-- M5.6 Case Study Decision Analysis Section -->
+        <div class="case-analysis-container" id="case-analysis-container" style="display: none;">
+          <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+            ðŸ“Š DECISION ANALYSIS: <span id="case-analysis-title-text" style="color: var(--accent);">Case 1 â€” Capital Pressure</span>
+          </h4>
+          <p id="case-analysis-narrative-text" style="font-size: 0.9rem; color: #334155; line-height: 1.6;"></p>
+
+          <!-- The Trade-off Card -->
+          <div class="tradeoff-card">
+            <strong style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; color: var(--accent);">âš–ï¸ The Strategic Trade-Off</strong>
+            <div class="tradeoff-grid" id="case-tradeoff-grid">
+              <!-- Injected dynamically based on treaty direction -->
+            </div>
+          </div>
+
+          <!-- Think About It Reflection -->
+          <div class="reflection-box">
+            <h5>ðŸ’¡ Think About It (Actuarial Reflection)</h5>
+            <ul id="case-reflection-questions">
+              <!-- Injected dynamically -->
+            </ul>
+          </div>
+        </div>
+
         <!-- M5.4 Prediction Feedback Banner -->
         <div class="feedback-banner" id="prediction-feedback-banner" style="display: none;">
           <div class="feedback-title" id="feedback-title-text"></div>
@@ -1224,7 +1395,7 @@
           </div>
         </div>
 
-        <!-- M5.5 V4: Visual Baseline vs Scenario Comparative Bars -->
+        <!-- M5.5 Comparative Split Bars -->
         <div class="comparative-bars-grid">
           <div class="comp-bar-column">
             <span class="comp-bar-header">Baseline Allocation (<span id="comp-base-qs-label">40% QS</span>)</span>
@@ -1300,13 +1471,11 @@
 
         <!-- M5.3 Learning & Interpretation Layer -->
         <div class="learning-layer-section">
-          <!-- Dynamic Directional Interpretation -->
           <div class="learning-block">
-            <h4>💡 Why Did This Happen?</h4>
+            <h4>ðŸ’¡ Why Did This Happen?</h4>
             <p class="learning-narrative" id="learning-why-narrative"></p>
           </div>
 
-          <!-- 5 Educational Concept Cards -->
           <div class="learning-cards-grid">
             <div class="edu-card">
               <span class="edu-card-header">1. Risk Transfer</span>
@@ -1335,7 +1504,6 @@
             </div>
           </div>
 
-          <!-- Actuarial Learning Note -->
           <div class="educational-note">
             <strong>Learning Note:</strong> Quota Share changes how premium, claims, and commissions are shared proportionally. Whether a higher or lower QS is preferable depends on the primary insurer's risk appetite, capital solvency requirements, pricing accuracy, and overall treaty expense terms.
           </div>
@@ -1347,6 +1515,7 @@
   <script>
     let baselineData = null;
     let scenarioData = null;
+    let activeCaseIndex = 0;
 
     const formatUSD = (val) => {
       if (val === undefined || val === null || isNaN(val)) return "$0.00";
@@ -1382,7 +1551,90 @@
 
       const riskRowsBody = document.getElementById("risk-rows");
 
-      // Challenges definition
+      // M5.6 Case Studies Definition
+      const caseStudies = [
+        {
+          id: "btn-case-1",
+          title: "Case 1: Capital Pressure",
+          difficulty: "BEGINNER",
+          diffClass: "diff-beginner",
+          qs: 60,
+          comm: 30,
+          situation: "The board of directors is concerned about capital solvency and potential catastrophic portfolio losses. Regulators require higher solvency margin relief, demanding substantial risk transfer to reinsurers.",
+          objective: "Increase proportional risk transfer to alleviate balance sheet pressure.",
+          reflections: [
+            "Why might an insurer accept lower retained premium in exchange for lower retained claims exposure?",
+            "How does ceding 60% of claims protect the insurer's statutory solvency during severe loss years?",
+            "What future underwriting upside is forfeited by ceding a majority of premium?"
+          ]
+        },
+        {
+          id: "btn-case-2",
+          title: "Case 2: Retain More Underwriting Upside",
+          difficulty: "INTERMEDIATE",
+          diffClass: "diff-intermediate",
+          qs: 20,
+          comm: 30,
+          situation: "The underwriting department has overhauled its risk selection criteria and expects an exceptionally profitable year with low loss ratios. Management wants to retain maximum premium revenue rather than ceding it away.",
+          objective: "Reduce the proportion of business ceded to keep more premium earnings on the balance sheet.",
+          reflections: [
+            "What happens to the cedant's bottom line if claims suddenly surge unexpectedly?",
+            "Why is retaining 80% of premium considered a high-conviction underwriting strategy?",
+            "How does lowering Quota Share impact the insurer's required capital reserves?"
+          ]
+        },
+        {
+          id: "btn-case-3",
+          title: "Case 3: Commission Negotiation",
+          difficulty: "ADVANCED",
+          diffClass: "diff-advanced",
+          qs: 40,
+          comm: 35,
+          situation: "The cedant's policy distribution and administrative acquisition costs have increased. The primary insurer seeks to negotiate a higher ceding commission with the reinsurer while maintaining a standard 40% Quota Share allocation.",
+          objective: "Explore how changing the ceding commission alters economic transfers without changing premium/claim splits.",
+          reflections: [
+            "Why does ceding commission improve the cedant's net result without altering gross risk transfer?",
+            "How does the reinsurer evaluate whether a 35% ceding commission is sustainable relative to expected loss ratios?",
+            "What trade-off does the reinsurer make between premium volume and acquisition expense loading?"
+          ]
+        }
+      ];
+
+      function updateDecisionStatsPreview() {
+        const statsEl = document.getElementById("case-decision-stats-txt");
+        if (statsEl) {
+          statsEl.textContent = `${scenarioQsInput.value}% QS | ${scenarioCommInput.value}% Commission | $${scenarioCedExpInput.value} Cedant Exp`;
+        }
+      }
+
+      scenarioQsInput.addEventListener("input", updateDecisionStatsPreview);
+      scenarioCommInput.addEventListener("input", updateDecisionStatsPreview);
+      scenarioCedExpInput.addEventListener("input", updateDecisionStatsPreview);
+      scenarioReinExpInput.addEventListener("input", updateDecisionStatsPreview);
+
+      caseStudies.forEach((cs, idx) => {
+        const btn = document.getElementById(cs.id);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            document.querySelectorAll("#case-study-panel .btn-preset").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            activeCaseIndex = idx;
+
+            const diffBadge = document.getElementById("case-diff-badge");
+            diffBadge.textContent = cs.difficulty;
+            diffBadge.className = `case-badge-diff ${cs.diffClass}`;
+
+            document.getElementById("case-situation-desc").textContent = cs.situation;
+            document.getElementById("case-objective-desc").textContent = cs.objective;
+
+            scenarioQsInput.value = cs.qs;
+            scenarioCommInput.value = cs.comm;
+            updateDecisionStatsPreview();
+          });
+        }
+      });
+
+      // Challenges definition (M5.4)
       const challenges = [
         {
           id: "btn-challenge-1",
@@ -1413,6 +1665,7 @@
             scenarioQsInput.value = c.qs;
             scenarioCommInput.value = c.comm;
             document.getElementById("challenge-instructions").innerHTML = c.desc;
+            updateDecisionStatsPreview();
           });
         }
       });
@@ -1455,6 +1708,7 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
       });
 
       document.getElementById("scenario-preset-baseline").addEventListener("click", () => {
@@ -1462,6 +1716,7 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
       });
 
       document.getElementById("scenario-preset-60").addEventListener("click", () => {
@@ -1469,6 +1724,7 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
       });
 
       document.getElementById("scenario-preset-100").addEventListener("click", () => {
@@ -1476,6 +1732,7 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
       });
 
       // Add Risk Row
@@ -1525,6 +1782,7 @@
         cedExpInput.value = 0;
         reinExpInput.value = 0;
         clearPredictions();
+        document.getElementById("case-analysis-container").style.display = "none";
         runBaselineSimulation();
       });
 
@@ -1534,10 +1792,31 @@
         scenarioCommInput.value = 30;
         scenarioCedExpInput.value = 0;
         scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
         clearPredictions();
         document.getElementById("comparison-container").style.display = "none";
         document.getElementById("prediction-feedback-banner").style.display = "none";
+        document.getElementById("case-analysis-container").style.display = "none";
         scenarioData = null;
+      });
+
+      // M5.6 Reset Case Button
+      document.getElementById("btn-reset-case").addEventListener("click", () => {
+        document.querySelectorAll("#case-study-panel .btn-preset").forEach(b => b.classList.remove("active"));
+        document.getElementById("btn-case-1").classList.add("active");
+        activeCaseIndex = 0;
+        const cs = caseStudies[0];
+        document.getElementById("case-diff-badge").textContent = cs.difficulty;
+        document.getElementById("case-diff-badge").className = `case-badge-diff ${cs.diffClass}`;
+        document.getElementById("case-situation-desc").textContent = cs.situation;
+        document.getElementById("case-objective-desc").textContent = cs.objective;
+
+        scenarioQsInput.value = 40;
+        scenarioCommInput.value = 30;
+        scenarioCedExpInput.value = 0;
+        scenarioReinExpInput.value = 0;
+        updateDecisionStatsPreview();
+        document.getElementById("case-analysis-container").style.display = "none";
       });
 
       function clearPredictions() {
@@ -1671,7 +1950,7 @@
         document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
         document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
 
-        // M5.5 V1: Premium Flow Tree
+        // V1: Premium Flow
         document.getElementById("flow-gross-premium").textContent = `${formatUSD(grossPrem)} (Gross Written Premium)`;
         document.getElementById("flow-cedant-premium").textContent = formatUSD(retPrem);
         document.getElementById("flow-reinsurer-premium").textContent = formatUSD(cededPrem);
@@ -1682,14 +1961,14 @@
         document.getElementById("flow-cedant-prem-pct").textContent = `${retPct}% Retained`;
         document.getElementById("flow-reinsurer-prem-pct").textContent = `${qsPct}% Ceded`;
 
-        // M5.5 V2: Claims Recovery Flow Tree
+        // V2: Claims Flow
         document.getElementById("flow-gross-claims").textContent = `${formatUSD(grossClms)} (Gross Claims Incurred)`;
         document.getElementById("flow-cedant-claims").textContent = formatUSD(retClms);
         document.getElementById("flow-reinsurer-claims").textContent = formatUSD(recClms);
         document.getElementById("flow-cedant-claims-pct").textContent = `${retPct}% Incurred`;
         document.getElementById("flow-reinsurer-claims-pct").textContent = `${qsPct}% Recovered`;
 
-        // M5.5 V3: Risk Transfer Bar
+        // V3: Risk Transfer Bar
         document.getElementById("risk-bar-label-cedant").textContent = `Cedant Retained: ${retPct}%`;
         document.getElementById("risk-bar-label-reinsurer").textContent = `Reinsurer Ceded: ${qsPct}%`;
         const barCed = document.getElementById("risk-bar-cedant");
@@ -1699,11 +1978,11 @@
         barRein.style.width = `${qsPct}%`;
         barRein.textContent = `${qsPct}%`;
 
-        // M5.5 V6: Commission Visual Transfer
+        // V6: Commission Visual Transfer
         document.getElementById("comm-flow-ceded-prem").textContent = formatUSD(cededPrem);
         document.getElementById("comm-flow-amount").textContent = formatUSD(commRec);
 
-        // M5.5 V7: Reconciliation Checks
+        // V7: Reconciliation Checks
         const diffPrem = data.reconciliation?.premium_difference ?? 0;
         const diffClms = data.reconciliation?.claims_difference ?? 0;
         const diffRes  = data.reconciliation?.result_difference ?? 0;
@@ -1712,7 +1991,7 @@
         document.getElementById("recon-claims").textContent = formatUSD(diffClms);
         document.getElementById("recon-result").textContent = formatUSD(diffRes);
 
-        // M5.5 V5: Individual Risk Visual Allocation Matrix
+        // V5: Individual Risk Visual Allocation Matrix
         renderIndividualRisks(data.risks || [], retPct, qsPct);
       }
 
@@ -1774,7 +2053,7 @@
         document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
         document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
 
-        // M5.5 V4: Visual Baseline vs Scenario Comparative Split Bars
+        // V4: Comparative Split Bars
         document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
         document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
 
@@ -1880,11 +2159,107 @@
           </tr>
         `).join("");
 
+        // M5.6 Case Study Decision Analysis
+        evaluateCaseStudyDecision(base, scen, baseQS, scenQS, baseComm, scenComm);
+
         // M5.4 Prediction Evaluation
         evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm);
 
         // M5.3 Educational Insights
         generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm);
+      }
+
+      function evaluateCaseStudyDecision(base, scen, baseQS, scenQS, baseComm, scenComm) {
+        const container = document.getElementById("case-analysis-container");
+        container.style.display = "flex";
+
+        const cs = caseStudies[activeCaseIndex];
+        document.getElementById("case-analysis-title-text").textContent = cs.title;
+
+        // Generate narrative based on student's actual treaty parameters
+        const narrativeEl = document.getElementById("case-analysis-narrative-text");
+        let analysisText = "";
+
+        if (activeCaseIndex === 0) { // Capital Pressure
+          if (scenQS > baseQS) {
+            analysisText = `Your decision to set Quota Share at <strong>${scenQS}%</strong> successfully transfers a greater proportion of the portfolio liability to the reinsurer. This reduces the cedant's dollar loss exposure to ${formatUSD(scen.cedant?.claims_retained ?? 0)} (down from ${formatUSD(base.cedant?.claims_retained ?? 0)}), addressing solvency pressure. In exchange, the cedant gives up ${formatUSD(scen.cedant?.premium_ceded ?? 0)} in top-line premium.`;
+          } else {
+            analysisText = `Your chosen Quota Share of <strong>${scenQS}%</strong> retains ${100 - scenQS}% of portfolio liability. While retaining more premium (${formatUSD(scen.cedant?.premium_retained ?? 0)}), this leaves substantial claim exposure on the cedant's balance sheet (${formatUSD(scen.cedant?.claims_retained ?? 0)}), providing less solvency relief than higher ceding options.`;
+          }
+        } else if (activeCaseIndex === 1) { // Retain More Upside
+          if (scenQS < baseQS) {
+            analysisText = `By lowering Quota Share to <strong>${scenQS}%</strong>, your decision maximizes top-line retention. The cedant keeps ${formatUSD(scen.cedant?.premium_retained ?? 0)} (${100 - scenQS}% of gross premium). If portfolio claims remain favorable, the cedant captures the underwriting margin directly. However, the cedant absorbs ${formatUSD(scen.cedant?.claims_retained ?? 0)} in direct claims liability.`;
+          } else {
+            analysisText = `Setting Quota Share at <strong>${scenQS}%</strong> cedes ${formatUSD(scen.cedant?.premium_ceded ?? 0)} of gross premium to the reinsurer. While this provides reinsurance loss mitigation, it surrenders a larger share of potential underwriting profits back to the reinsurer.`;
+          }
+        } else { // Commission Negotiation
+          const commDelta = scenComm - baseComm;
+          analysisText = `At <strong>${scenQS}% QS</strong> and <strong>${scenComm}% Ceding Commission</strong>, the reinsurer returns ${formatUSD(scen.cedant?.commission_received ?? 0)} in acquisition allowance back to the cedant. ${commDelta > 0 ? `The higher commission rate improves the cedant's net result by offseting internal distribution costs.` : commDelta < 0 ? `The lower commission reduces immediate cedant cash flow recovery.` : `Commission reimbursement remains steady at baseline terms.`} The risk transfer split of claims remains identical at ${scenQS}%.`;
+        }
+
+        narrativeEl.innerHTML = analysisText;
+
+        // Trade-off breakdown
+        const tradeoffGrid = document.getElementById("case-tradeoff-grid");
+        if (scenQS > baseQS) {
+          tradeoffGrid.innerHTML = `
+            <div>
+              <strong style="color: #059669;">âœ“ Protection Advantages:</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>Lower retained claims (${formatUSD(scen.cedant?.claims_retained ?? 0)})</li>
+                <li>Enhanced balance sheet solvency protection</li>
+                <li>Higher commission received (${formatUSD(scen.cedant?.commission_received ?? 0)})</li>
+              </ul>
+            </div>
+            <div>
+              <strong style="color: #dc2626;">âš  Strategic Costs:</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>Lower retained premium (${formatUSD(scen.cedant?.premium_retained ?? 0)})</li>
+                <li>Surrendered future underwriting margin</li>
+                <li>Dependence on reinsurer creditworthiness</li>
+              </ul>
+            </div>
+          `;
+        } else if (scenQS < baseQS) {
+          tradeoffGrid.innerHTML = `
+            <div>
+              <strong style="color: #059669;">âœ“ Growth Advantages:</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>Higher retained premium (${formatUSD(scen.cedant?.premium_retained ?? 0)})</li>
+                <li>Full capture of favorable loss margins</li>
+                <li>Retained market premium volume</li>
+              </ul>
+            </div>
+            <div>
+              <strong style="color: #dc2626;">âš  Solvency Risks:</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>Higher retained claims exposure (${formatUSD(scen.cedant?.claims_retained ?? 0)})</li>
+                <li>Increased net loss volatility during bad years</li>
+                <li>Less ceding commission recovery</li>
+              </ul>
+            </div>
+          `;
+        } else {
+          tradeoffGrid.innerHTML = `
+            <div>
+              <strong style="color: #0284c7;">Balanced Allocation (${baseQS}% QS):</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>Standard balance between risk transfer and retention</li>
+                <li>Retains ${100 - baseQS}% premium and ${100 - baseQS}% claims</li>
+              </ul>
+            </div>
+            <div>
+              <strong style="color: #7c3aed;">Commission Driver:</strong>
+              <ul style="margin-left: 16px; margin-top: 4px;">
+                <li>${scenComm}% commission yields ${formatUSD(scen.cedant?.commission_received ?? 0)} reimbursement</li>
+              </ul>
+            </div>
+          `;
+        }
+
+        // Reflection Questions
+        const refList = document.getElementById("case-reflection-questions");
+        refList.innerHTML = cs.reflections.map(q => `<li>${q}</li>`).join("");
       }
 
       function evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm) {
@@ -1968,13 +2343,13 @@
 
         if (matches === selectedCount && selectedCount > 0) {
           banner.classList.add("feedback-correct");
-          titleEl.innerHTML = "✓ Prediction Correct!";
+          titleEl.innerHTML = "âœ“ Prediction Correct!";
         } else if (matches > 0) {
           banner.classList.add("feedback-partial");
-          titleEl.innerHTML = "△ Prediction Partially Correct";
+          titleEl.innerHTML = "â–³ Prediction Partially Correct";
         } else {
           banner.classList.add("feedback-incorrect");
-          titleEl.innerHTML = "✗ Prediction Did Not Match Outcome";
+          titleEl.innerHTML = "âœ— Prediction Did Not Match Outcome";
         }
 
         detailsEl.innerHTML = `
@@ -2052,11 +2427,12 @@
         }
 
         const ecoEl = document.getElementById("edu-economics-tradeoff-text");
-        ecoEl.textContent = `Quota Share does not only transfer losses—it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
+        ecoEl.textContent = `Quota Share does not only transfer lossesâ€”it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
       }
 
       document.getElementById("btn-run-simulation").addEventListener("click", runBaselineSimulation);
       document.getElementById("btn-run-scenario").addEventListener("click", runScenarioSimulation);
+      document.getElementById("btn-run-case").addEventListener("click", runScenarioSimulation);
 
       runBaselineSimulation();
     });
