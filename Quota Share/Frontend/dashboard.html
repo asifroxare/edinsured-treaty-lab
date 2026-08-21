@@ -44,7 +44,6 @@
     .section-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); }
     .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle); }
     .section-header h2 { font-size: 1.15rem; font-weight: 700; color: #ffffff; }
-    .section-subtext { font-size: 0.82rem; color: var(--text-muted); margin-top: 3px; }
 
     .preset-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .preset-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-right: 4px; }
@@ -196,7 +195,7 @@
       <div class="treaty-grid">
         <div class="form-group">
           <label for="qs-percentage">Quota Share (%)</label>
-          <input type="number" id="qs-percentage" min="0" max="100" step="1" value="70">
+          <input type="number" id="qs-percentage" min="0" max="100" step="1" value="40">
         </div>
         <div class="form-group">
           <label for="ceding-commission">Ceding Commission (%)</label>
@@ -307,12 +306,12 @@
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Retained</span>
               <span class="branch-amount" id="flow-cedant-premium">$0.00</span>
-              <span class="branch-pct" id="flow-cedant-prem-pct">30%</span>
+              <span class="branch-pct" id="flow-cedant-prem-pct">60%</span>
             </div>
             <div class="flow-branch branch-reinsurer">
               <span class="branch-title">Reinsurer Ceded</span>
               <span class="branch-amount" id="flow-reinsurer-premium">$0.00</span>
-              <span class="branch-pct" id="flow-reinsurer-prem-pct">70%</span>
+              <span class="branch-pct" id="flow-reinsurer-prem-pct">40%</span>
             </div>
           </div>
         </div>
@@ -325,12 +324,12 @@
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Incurred</span>
               <span class="branch-amount" id="flow-cedant-claims">$0.00</span>
-              <span class="branch-pct" id="flow-cedant-claims-pct">30%</span>
+              <span class="branch-pct" id="flow-cedant-claims-pct">60%</span>
             </div>
             <div class="flow-branch branch-reinsurer">
               <span class="branch-title">Reinsurer Recovered</span>
               <span class="branch-amount" id="flow-reinsurer-claims">$0.00</span>
-              <span class="branch-pct" id="flow-reinsurer-claims-pct">70%</span>
+              <span class="branch-pct" id="flow-reinsurer-claims-pct">40%</span>
             </div>
           </div>
         </div>
@@ -339,12 +338,12 @@
           <h3>⚖️ Risk Transfer Split</h3>
           <div class="risk-bar-container">
             <div class="risk-bar-labels">
-              <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 30%</span>
-              <span style="color: var(--reinsurer-color);" id="risk-bar-label-reinsurer">Reinsurer: 70%</span>
+              <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 60%</span>
+              <span style="color: var(--reinsurer-color);" id="risk-bar-label-reinsurer">Reinsurer: 40%</span>
             </div>
             <div class="risk-bar-track">
-              <div class="bar-segment-cedant" id="risk-bar-cedant" style="width: 30%;">30%</div>
-              <div class="bar-segment-reinsurer" id="risk-bar-reinsurer" style="width: 70%;">70%</div>
+              <div class="bar-segment-cedant" id="risk-bar-cedant" style="width: 60%;">60%</div>
+              <div class="bar-segment-reinsurer" id="risk-bar-reinsurer" style="width: 40%;">40%</div>
             </div>
           </div>
 
@@ -904,6 +903,10 @@
         commInput.value = 30;
         cedExpInput.value = 0;
         reinExpInput.value = 0;
+        const claims = riskRowsBody.querySelectorAll(".risk-claim");
+        if (claims[0]) claims[0].value = 2000000;
+        if (claims[1]) claims[1].value = 0;
+        if (claims[2]) claims[2].value = 500000;
         runBaselineSimulation();
       });
 
@@ -1006,7 +1009,7 @@
           </tr>
         `;
         riskRowsBody.querySelectorAll(".btn-delete").forEach(attachDeleteHandler);
-        qsInput.value = 70;
+        qsInput.value = 40;
         commInput.value = 30;
         cedExpInput.value = 0;
         reinExpInput.value = 0;
@@ -1186,41 +1189,33 @@
       }
 
       function renderBaseline(data) {
-        let grossPrem = 0;
-        let grossClms = 0;
+        const domRisks = getRisksFromDOM();
+        const grossPrem = domRisks.reduce((s, r) => s + r.gross_premium, 0);
+        const grossClms = domRisks.reduce((s, r) => s + r.claim_amount, 0);
 
-        if (data.portfolio && Array.isArray(data.portfolio.risks)) {
-          grossPrem = data.portfolio.risks.reduce((sum, r) => sum + (Number(r.gross_premium) || 0), 0);
-          grossClms = data.portfolio.risks.reduce((sum, r) => sum + (Number(r.claim_amount) || 0), 0);
-        } else if (Array.isArray(data.risks)) {
-          grossPrem = data.risks.reduce((sum, r) => sum + (Number(r.gross_premium) || 0), 0);
-          grossClms = data.risks.reduce((sum, r) => sum + (Number(r.claim_amount) || 0), 0);
-        }
+        const qsPctRaw = parseFloat(qsInput.value) / 100.0;
+        const commPctRaw = parseFloat(commInput.value) / 100.0;
+        const cedExp = parseFloat(cedExpInput.value) || 0;
+        const reinExp = parseFloat(reinExpInput.value) || 0;
 
-        if (!grossPrem && data.gross_metrics) {
-          grossPrem = data.gross_metrics.gross_premium ?? data.gross_metrics.total_premium ?? 0;
-        }
-        if (!grossClms && data.gross_metrics) {
-          grossClms = data.gross_metrics.gross_claims ?? data.gross_metrics.total_claims ?? 0;
-        }
+        const cededPrem = grossPrem * qsPctRaw;
+        const retPrem   = grossPrem - cededPrem;
+        const retClms   = grossClms * (1.0 - qsPctRaw);
+        const recClms   = grossClms * qsPctRaw;
+        const commRec   = cededPrem * commPctRaw;
 
-        const qsPctRaw = data.treaty?.quota_share_percentage ?? data.treaty?.quota_share_pct ?? (parseFloat(qsInput.value) / 100) ?? 0.7;
-        const commPctRaw = data.treaty?.ceding_commission_percentage ?? data.treaty?.ceding_commission_pct ?? (parseFloat(commInput.value) / 100) ?? 0.3;
+        const cedResult = (data.cedant && typeof data.cedant.net_underwriting_result === "number") 
+                          ? data.cedant.net_underwriting_result 
+                          : (retPrem - retClms + commRec - cedExp);
 
-        const cededPrem = data.cedant?.premium_ceded ?? (grossPrem * qsPctRaw);
-        const retPrem   = data.cedant?.premium_retained ?? (grossPrem - cededPrem);
-        const retClms   = data.cedant?.claims_retained ?? (grossClms * (1 - qsPctRaw));
-        const recClms   = data.cedant?.claims_recovered ?? (grossClms * qsPctRaw);
-        const commRec   = data.cedant?.commission_received ?? (cededPrem * commPctRaw);
-
-        const cedExp  = Number(data.treaty?.cedant_expenses) || Number(cedExpInput.value) || 0;
-        const reinExp = Number(data.treaty?.reinsurer_expenses) || Number(reinExpInput.value) || 0;
-
-        const cedResult = data.cedant?.net_underwriting_result ?? (retPrem - retClms + commRec - cedExp);
-        const reinResult= data.reinsurer?.net_underwriting_result ?? (cededPrem - recClms - commRec - reinExp);
+        const reinResult = (data.reinsurer && typeof data.reinsurer.net_underwriting_result === "number") 
+                          ? data.reinsurer.net_underwriting_result 
+                          : (cededPrem - recClms - commRec - reinExp);
 
         const lossRatioVal = grossPrem > 0 ? (grossClms / grossPrem) * 100 : 0;
-        const combinedResVal = data.combined?.result ?? (cedResult + reinResult);
+        const combinedResVal = (data.combined && typeof data.combined.result === "number")
+                               ? data.combined.result
+                               : (cedResult + reinResult);
 
         document.getElementById("card-gross-premium").textContent = formatUSD(grossPrem);
         document.getElementById("card-gross-claims").textContent = formatUSD(grossClms);
@@ -1273,7 +1268,7 @@
         document.getElementById("recon-claims").textContent = formatUSD(0);
         document.getElementById("recon-result").textContent = formatUSD(0);
 
-        renderIndividualRisks(data.risks || getRisksFromDOM(), retPct, qsPct);
+        renderIndividualRisks(domRisks, retPct, qsPct);
       }
 
       function renderIndividualRisks(risks, retPct, qsPct) {
@@ -1290,10 +1285,10 @@
           const rId = r.risk_id || `Risk 00${i+1}`;
           const gPrem = Number(r.gross_premium) || 0;
           const gClm = Number(r.claim_amount) || 0;
-          const premRet = r.retained_premium ?? (gPrem * ret);
-          const premCed = r.ceded_premium ?? (gPrem * qs);
-          const clmRet  = r.retained_claim ?? (gClm * ret);
-          const clmCed  = r.ceded_claim ?? (gClm * qs);
+          const premRet = gPrem * ret;
+          const premCed = gPrem * qs;
+          const clmRet  = gClm * ret;
+          const clmCed  = gClm * qs;
 
           return `
             <div class="risk-visual-card">
@@ -1329,12 +1324,12 @@
         const compContainer = document.getElementById("comparison-container");
         compContainer.style.display = "block";
 
-        const baseQS = Math.round((base.treaty?.quota_share_percentage ?? base.treaty?.quota_share_pct ?? 0.4) * 100);
+        const baseQS = parseFloat(qsInput.value);
         const baseRet = 100 - baseQS;
-        const baseComm = Math.round((base.treaty?.ceding_commission_percentage ?? base.treaty?.ceding_commission_pct ?? 0.3) * 100);
-        const scenQS = Math.round((scen.treaty?.quota_share_percentage ?? scen.treaty?.quota_share_pct ?? 0.6) * 100);
+        const baseComm = parseFloat(commInput.value);
+        const scenQS = parseFloat(scenarioQsInput.value);
         const scenRet = 100 - scenQS;
-        const scenComm = Math.round((scen.treaty?.ceding_commission_percentage ?? scen.treaty?.ceding_commission_pct ?? 0.3) * 100);
+        const scenComm = parseFloat(scenarioCommInput.value);
 
         document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
         document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
@@ -1342,15 +1337,21 @@
         document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
         document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
 
-        const basePremRet = base.cedant?.premium_retained ?? 0;
-        const basePremCed = base.cedant?.premium_ceded ?? 0;
-        const baseClmRet  = base.cedant?.claims_retained ?? 0;
-        const baseClmCed  = base.cedant?.claims_recovered ?? 0;
+        const domRisks = getRisksFromDOM();
+        const grossPrem = domRisks.reduce((s, r) => s + r.gross_premium, 0);
+        const grossClms = domRisks.reduce((s, r) => s + r.claim_amount, 0);
 
-        const scenPremRet = scen.cedant?.premium_retained ?? 0;
-        const scenPremCed = scen.cedant?.premium_ceded ?? 0;
-        const scenClmRet  = scen.cedant?.claims_retained ?? 0;
-        const scenClmCed  = scen.cedant?.claims_recovered ?? 0;
+        const basePremCed = grossPrem * (baseQS / 100.0);
+        const basePremRet = grossPrem - basePremCed;
+        const baseClmCed  = grossClms * (baseQS / 100.0);
+        const baseClmRet  = grossClms - baseClmCed;
+        const baseCommAmt = basePremCed * (baseComm / 100.0);
+
+        const scenPremCed = grossPrem * (scenQS / 100.0);
+        const scenPremRet = grossPrem - scenPremCed;
+        const scenClmCed  = grossClms * (scenQS / 100.0);
+        const scenClmRet  = grossClms - scenClmCed;
+        const scenCommAmt = scenPremCed * (scenComm / 100.0);
 
         document.getElementById("comp-base-prem-txt").textContent = `${formatUSD(basePremRet)} (${baseRet}%) / ${formatUSD(basePremCed)} (${baseQS}%)`;
         document.getElementById("comp-base-clm-txt").textContent = `${formatUSD(baseClmRet)} (${baseRet}%) / ${formatUSD(baseClmCed)} (${baseQS}%)`;
@@ -1366,12 +1367,12 @@
         document.getElementById("comp-scen-clm-bar-ret").style.width = `${scenRet}%`;
         document.getElementById("comp-scen-clm-bar-ced").style.width = `${scenQS}%`;
 
-        const baseCedResult = base.cedant?.net_underwriting_result ?? 0;
-        const scenCedResult = scen.cedant?.net_underwriting_result ?? 0;
+        const baseCedResult = basePremRet - baseClmRet + baseCommAmt;
+        const scenCedResult = scenPremRet - scenClmRet + scenCommAmt;
         const cedantDelta = scenCedResult - baseCedResult;
 
-        const baseReinResult = base.reinsurer?.net_underwriting_result ?? 0;
-        const scenReinResult = scen.reinsurer?.net_underwriting_result ?? 0;
+        const baseReinResult = basePremCed - baseClmCed - baseCommAmt;
+        const scenReinResult = scenPremCed - scenClmCed - scenCommAmt;
         const reinsurerDelta = scenReinResult - baseReinResult;
 
         const baseLR = basePremRet > 0 ? (baseClmRet / basePremRet) * 100 : 0;
@@ -1395,10 +1396,10 @@
           { name: "Premium Ceded (Reinsurer)", b: basePremCed, s: scenPremCed },
           { name: "Claims Retained (Cedant)", b: baseClmRet, s: scenClmRet },
           { name: "Claims Recovered (Ceded)", b: baseClmCed, s: scenClmCed },
-          { name: "Ceding Commission", b: base.cedant?.commission_received ?? 0, s: scen.cedant?.commission_received ?? 0 },
+          { name: "Ceding Commission", b: baseCommAmt, s: scenCommAmt },
           { name: "Cedant Net Underwriting Result", b: baseCedResult, s: scenCedResult },
           { name: "Reinsurer Net Underwriting Result", b: baseReinResult, s: scenReinResult },
-          { name: "Combined Underwriting Result", b: base.combined?.result ?? 0, s: scen.combined?.result ?? 0 }
+          { name: "Combined Underwriting Result", b: baseCedResult + baseReinResult, s: scenCedResult + scenReinResult }
         ];
 
         const tbody = document.getElementById("comparison-rows");
@@ -1411,7 +1412,7 @@
           </tr>
         `).join("");
 
-        renderSessionSummaryAndSynthesis(base, scen, baseQS, scenQS, baseComm, scenComm);
+        renderSessionSummaryAndSynthesis(base, scen, baseQS, scenQS, baseComm, scenComm, scenCedResult);
 
         if (isCaseModeActive) {
           evaluateCaseStudyDecision(base, scen, baseQS, scenQS, baseComm, scenComm);
@@ -1423,7 +1424,7 @@
         generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm);
       }
 
-      function renderSessionSummaryAndSynthesis(base, scen, baseQS, scenQS, baseComm, scenComm) {
+      function renderSessionSummaryAndSynthesis(base, scen, baseQS, scenQS, baseComm, scenComm, netResult) {
         document.getElementById("session-timestamp").textContent = "Executed: " + new Date().toLocaleTimeString();
 
         const contextTag = document.getElementById("session-context-tag");
@@ -1435,8 +1436,8 @@
 
         summaryQS.textContent = `${scenQS}%`;
         summaryComm.textContent = `${scenComm}%`;
-        summaryExp.textContent = `${formatUSD(scen.treaty?.cedant_expenses ?? 0)} / ${formatUSD(scen.treaty?.reinsurer_expenses ?? 0)}`;
-        summaryNet.textContent = formatUSD(scen.cedant?.net_underwriting_result ?? 0);
+        summaryExp.textContent = `$0.00 / $0.00`;
+        summaryNet.textContent = formatUSD(netResult);
 
         if (isCaseModeActive) {
           const cs = caseStudies[activeCaseIndex];
