@@ -2136,19 +2136,21 @@
       }
 
       function renderBaseline(data) {
-        const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 225000;
-        const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 2500000;
-        const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 90000;
-        const retPrem   = data.cedant?.premium_retained ?? data.cedant?.retained_premium ?? 135000;
-        const retClms   = data.cedant?.claims_retained ?? data.cedant?.retained_claims ?? 1500000;
-        const recClms   = data.cedant?.claims_recovered ?? data.reinsurer?.claims_incurred ?? 1000000;
-        const commRec   = data.cedant?.commission_received ?? data.cedant?.ceding_commission ?? data.treaty?.commission_paid ?? 27000;
-        const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? -1338000;
-        const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? -937000;
+        // Explicit undefined/null check so $0 values are never overwritten by mock defaults
+        const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 0;
+        const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 0;
+        const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 0;
+        const retPrem   = data.cedant?.premium_retained ?? data.cedant?.retained_premium ?? 0;
+        const retClms   = data.cedant?.claims_retained ?? data.cedant?.retained_claims ?? 0;
+        const recClms   = data.cedant?.claims_recovered ?? data.reinsurer?.claims_incurred ?? 0;
+        const commRec   = data.cedant?.commission_received ?? data.cedant?.ceding_commission ?? data.treaty?.commission_paid ?? 0;
+        const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? 0;
+        const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? 0;
 
-        const lossRatioVal = data.gross_metrics?.loss_ratio ?? data.gross_metrics?.gross_loss_ratio ?? 1111.11;
-        const combinedResVal = data.combined?.result ?? data.combined?.net_underwriting_result ?? data.combined?.combined_result ?? -2275000;
+        const lossRatioVal = data.gross_metrics?.loss_ratio ?? data.gross_metrics?.gross_loss_ratio ?? 0;
+        const combinedResVal = data.combined?.result ?? data.combined?.net_underwriting_result ?? data.combined?.combined_result ?? 0;
 
+        // 1. KPI Cards
         document.getElementById("card-gross-premium").textContent = formatUSD(grossPrem);
         document.getElementById("card-gross-claims").textContent = formatUSD(grossClms);
         
@@ -2163,6 +2165,7 @@
         document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
         document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
 
+        // 2. Premium Flow
         document.getElementById("flow-gross-premium").textContent = `${formatUSD(grossPrem)} (Gross Written Premium)`;
         document.getElementById("flow-cedant-premium").textContent = formatUSD(retPrem);
         document.getElementById("flow-reinsurer-premium").textContent = formatUSD(cededPrem);
@@ -2173,24 +2176,34 @@
         document.getElementById("flow-cedant-prem-pct").textContent = `${retPct}% Retained`;
         document.getElementById("flow-reinsurer-prem-pct").textContent = `${qsPct}% Ceded`;
 
+        // 3. Claims Flow
         document.getElementById("flow-gross-claims").textContent = `${formatUSD(grossClms)} (Gross Claims Incurred)`;
         document.getElementById("flow-cedant-claims").textContent = formatUSD(retClms);
         document.getElementById("flow-reinsurer-claims").textContent = formatUSD(recClms);
         document.getElementById("flow-cedant-claims-pct").textContent = `${retPct}% Incurred`;
         document.getElementById("flow-reinsurer-claims-pct").textContent = `${qsPct}% Recovered`;
 
+        // 4. Risk Transfer Bar
         document.getElementById("risk-bar-label-cedant").textContent = `Cedant Retained: ${retPct}%`;
         document.getElementById("risk-bar-label-reinsurer").textContent = `Reinsurer Ceded: ${qsPct}%`;
         const barCed = document.getElementById("risk-bar-cedant");
         const barRein = document.getElementById("risk-bar-reinsurer");
-        barCed.style.width = `${retPct}%`;
-        barCed.textContent = `${retPct}%`;
-        barRein.style.width = `${qsPct}%`;
-        barRein.textContent = `${qsPct}%`;
+        if (barCed) {
+          barCed.style.width = `${retPct}%`;
+          barCed.textContent = `${retPct}%`;
+        }
+        if (barRein) {
+          barRein.style.width = `${qsPct}%`;
+          barRein.textContent = `${qsPct}%`;
+        }
 
-        document.getElementById("comm-flow-ceded-prem").textContent = formatUSD(cededPrem);
-        document.getElementById("comm-flow-amount").textContent = formatUSD(commRec);
+        // 5. Commission Transfer
+        const commFlowCeded = document.getElementById("comm-flow-ceded-prem");
+        if (commFlowCeded) commFlowCeded.textContent = formatUSD(cededPrem);
+        const commFlowAmt = document.getElementById("comm-flow-amount");
+        if (commFlowAmt) commFlowAmt.textContent = formatUSD(commRec);
 
+        // 6. Reconciliation Checks
         const diffPrem = data.reconciliation?.premium_difference ?? 0;
         const diffClms = data.reconciliation?.claims_difference ?? 0;
         const diffRes  = data.reconciliation?.result_difference ?? 0;
@@ -2263,15 +2276,15 @@
         document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
         document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
 
-        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 135000;
-        const basePremCed = base.cedant?.premium_ceded ?? 90000;
-        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 1500000;
-        const baseClmCed  = base.cedant?.claims_recovered ?? 1000000;
+        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 0;
+        const basePremCed = base.cedant?.premium_ceded ?? 0;
+        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 0;
+        const baseClmCed  = base.cedant?.claims_recovered ?? 0;
 
-        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 90000;
-        const scenPremCed = scen.cedant?.premium_ceded ?? 135000;
-        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 1000000;
-        const scenClmCed  = scen.cedant?.claims_recovered ?? 1500000;
+        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 0;
+        const scenPremCed = scen.cedant?.premium_ceded ?? 0;
+        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 0;
+        const scenClmCed  = scen.cedant?.claims_recovered ?? 0;
 
         document.getElementById("comp-base-prem-txt").textContent = `${formatUSD(basePremRet)} (${baseRet}%) / ${formatUSD(basePremCed)} (${baseQS}%)`;
         document.getElementById("comp-base-clm-txt").textContent = `${formatUSD(baseClmRet)} (${baseRet}%) / ${formatUSD(baseClmCed)} (${baseQS}%)`;
@@ -2287,12 +2300,12 @@
         document.getElementById("comp-scen-clm-bar-ret").style.width = `${scenRet}%`;
         document.getElementById("comp-scen-clm-bar-ced").style.width = `${scenQS}%`;
 
-        const baseCedResult = base.cedant?.net_underwriting_result ?? -1338000;
-        const scenCedResult = scen.cedant?.net_underwriting_result ?? -870000;
+        const baseCedResult = base.cedant?.net_underwriting_result ?? 0;
+        const scenCedResult = scen.cedant?.net_underwriting_result ?? 0;
         const cedantDelta = scenCedResult - baseCedResult;
 
-        const baseReinResult = base.reinsurer?.net_underwriting_result ?? -937000;
-        const scenReinResult = scen.reinsurer?.net_underwriting_result ?? -1405000;
+        const baseReinResult = base.reinsurer?.net_underwriting_result ?? 0;
+        const scenReinResult = scen.reinsurer?.net_underwriting_result ?? 0;
         const reinsurerDelta = scenReinResult - baseReinResult;
 
         const baseLR = basePremRet > 0 ? (baseClmRet / basePremRet) * 100 : 0;
@@ -2334,8 +2347,8 @@
           },
           {
             name: "Ceding Commission",
-            b: base.cedant?.commission_received ?? 27000,
-            s: scen.cedant?.commission_received ?? 40500
+            b: base.cedant?.commission_received ?? 0,
+            s: scen.cedant?.commission_received ?? 0
           },
           {
             name: "Cedant Net Underwriting Result",
@@ -2349,8 +2362,8 @@
           },
           {
             name: "Combined Underwriting Result",
-            b: base.combined?.result ?? base.combined?.net_underwriting_result ?? -2275000,
-            s: scen.combined?.result ?? scen.combined?.net_underwriting_result ?? -2275000
+            b: base.combined?.result ?? base.combined?.net_underwriting_result ?? 0,
+            s: scen.combined?.result ?? scen.combined?.net_underwriting_result ?? 0
           }
         ];
 
