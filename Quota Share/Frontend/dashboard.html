@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EdInsured Treaty Lab � Quota Share Simulator</title>
+  <title>EdInsured Treaty Lab — Quota Share Simulator</title>
   <style>
     :root {
       --bg-base: #0b0f19;
@@ -12,1208 +12,155 @@
       --bg-card-hover: #1c273e;
       --border-subtle: #233048;
       --border-focus: #38bdf8;
-      
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      
       --primary: #38bdf8;
       --primary-hover: #0284c7;
       --accent: #818cf8;
-      --accent-hover: #6366f1;
       --cedant-color: #38bdf8;
       --reinsurer-color: #a855f7;
       --success: #10b981;
-      --warning: #f59e0b;
       --danger: #f43f5e;
-      
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: var(--font-family);
-      background-color: var(--bg-base);
-      color: var(--text-main);
-      line-height: 1.5;
-      padding-bottom: 50px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .app-header {
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 16px 0;
-      margin-bottom: 24px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-    }
-
-    .header-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-logo {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      color: #0b0f19;
-      font-size: 1.1rem;
-    }
-
-    .header-container h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-    }
-
-    .subtitle {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      background: rgba(16, 185, 129, 0.1);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.25);
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background-color: #10b981;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
-    }
-
-    .main-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .section-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 22px 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .section-header h2 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-subtext {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .preset-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .preset-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-right: 4px;
-    }
-
-    .btn-preset {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      padding: 5px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-preset:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-main);
-      border-color: var(--border-focus);
-    }
-
-    .btn-preset.active {
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    }
-
-    .treaty-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-group label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .form-group input {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      color: #ffffff;
-      font-size: 0.95rem;
-      font-weight: 600;
-      outline: none;
-      transition: border 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .form-group input:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-      margin-bottom: 20px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      background: var(--bg-card);
-    }
-
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    .data-table th,
-    .data-table td {
-      padding: 12px 14px;
-      font-size: 0.85rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .data-table th {
-      background: rgba(11, 15, 25, 0.7);
-      color: var(--text-dim);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.72rem;
-      letter-spacing: 0.05em;
-    }
-
-    .data-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .data-table input {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      width: 100%;
-    }
-
-    .data-table input:focus {
-      border-color: var(--primary);
-      outline: none;
-    }
-
-    .btn-delete {
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid rgba(244, 63, 94, 0.2);
-      color: var(--danger);
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.15s ease;
-    }
-
-    .btn-delete:hover {
-      background: var(--danger);
-      color: #ffffff;
-    }
-
-    .action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .action-bar-right {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      padding: 9px 18px;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #0369a1, #075985);
-      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.45);
-    }
-
-    .btn-accent {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    }
-
-    .btn-accent:hover {
-      background: linear-gradient(135deg, #4f46e5, #4338ca);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      border-color: var(--border-subtle);
-      color: var(--text-main);
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-focus);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border-color: var(--border-subtle);
-      color: var(--text-muted);
-    }
-
-    .btn-outline:hover {
-      background: var(--bg-card);
-      color: var(--text-main);
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .metric-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .card-value {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-top: 6px;
-      letter-spacing: -0.02em;
-    }
-
-    .visual-analytics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 18px;
-      margin-bottom: 24px;
-    }
-
-    .visual-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .visual-box h3 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #f1f5f9;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .flow-root-card {
-      background: rgba(11, 15, 25, 0.8);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 12px;
-      text-align: center;
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: #ffffff;
-    }
-
-    .flow-connector {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: var(--text-dim);
-      font-size: 1rem;
-      margin: -6px 0;
-    }
-
-    .flow-branches-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .flow-branch {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .branch-cedant {
-      border-top: 3px solid var(--cedant-color);
-    }
-
-    .branch-reinsurer {
-      border-top: 3px solid var(--reinsurer-color);
-    }
-
-    .branch-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-    }
-
-    .branch-amount {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .branch-pct {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .risk-bar-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .risk-bar-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .risk-bar-track {
-      height: 24px;
-      width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      display: flex;
-      overflow: hidden;
-    }
-
-    .bar-segment-cedant {
-      background: linear-gradient(90deg, #0284c7, #38bdf8);
-      height: 100%;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0b0f19;
-      font-size: 0.75rem;
-      font-weight: 800;
-    }
-
-    .bar-segment-reinsurer {
-      background: linear-gradient(90deg, #9333ea, #c084fc);
-      height: 100%;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0b0f19;
-      font-size: 0.75rem;
-      font-weight: 800;
-    }
-
-    .commission-flow-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 12px;
-    }
-
-    .comm-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .comm-arrow {
-      color: var(--text-dim);
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    .recon-flow-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-    }
-
-    .recon-flow-card {
-      background: var(--bg-surface);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: var(--radius-sm);
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 3px;
-    }
-
-    .recon-check {
-      color: var(--success);
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .risk-visual-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 14px;
-      margin-top: 12px;
-    }
-
-    .risk-visual-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .risk-card-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .risk-mini-bar {
-      display: flex;
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--bg-surface);
-      margin-top: 4px;
-    }
-
-    .comparative-bars-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 18px 0;
-    }
-
-    .comp-bar-column {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .comp-bar-header {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .comp-bar-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .comp-bar-track {
-      height: 12px;
-      background: var(--bg-surface);
-      border-radius: 4px;
-      overflow: hidden;
-      display: flex;
-    }
-
-    .scenario-lab-section {
-      border-left: 4px solid var(--accent);
-    }
-
-    .case-study-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .case-badge-diff {
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .diff-beginner {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .diff-intermediate {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
-    .diff-advanced {
-      background: rgba(244, 63, 94, 0.15);
-      color: #fb7185;
-      border: 1px solid rgba(244, 63, 94, 0.3);
-    }
-
-    .case-detail-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      margin: 14px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .case-situation-text {
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      line-height: 1.55;
-    }
-
-    .case-decision-preview {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      margin-top: 12px;
-      gap: 12px;
-    }
-
-    .case-decision-stats {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .case-analysis-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .tradeoff-card {
-      background: var(--bg-surface);
-      border-left: 4px solid var(--accent);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 14px 18px;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .tradeoff-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .reflection-box {
-      background: rgba(168, 85, 247, 0.08);
-      border: 1px solid rgba(168, 85, 247, 0.25);
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
-    }
-
-    .reflection-box h5 {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: #c084fc;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .reflection-box ul {
-      margin-left: 20px;
-      font-size: 0.85rem;
-      color: #e2e8f0;
-      line-height: 1.6;
-    }
-
-    .challenge-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 20px;
-    }
-
-    .challenge-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .challenge-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .challenge-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
-
-    .prediction-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-    }
-
-    .prediction-panel h4 {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 6px;
-    }
-
-    .prediction-panel p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-bottom: 14px;
-    }
-
-    .prediction-options-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 10px;
-    }
-
-    .prediction-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      color: var(--text-main);
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .prediction-label:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-focus);
-    }
-
-    .feedback-banner {
-      border-radius: var(--radius-md);
-      padding: 16px 20px;
-      margin: 20px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .feedback-correct {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #34d399;
-    }
-
-    .feedback-partial {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: #fbbf24;
-    }
-
-    .feedback-incorrect {
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      color: #fb7185;
-    }
-
-    .feedback-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .feedback-details {
-      font-size: 0.85rem;
-      line-height: 1.5;
-      color: #e2e8f0;
-    }
-
-    .scenario-grid {
-      background: var(--bg-card);
-      padding: 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      margin-bottom: 16px;
-    }
-
-    .what-changed-banner {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 14px 20px;
-      margin: 20px 0;
-    }
-
-    .badge-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .badge-title {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      letter-spacing: 0.05em;
-    }
-
-    .badge-detail {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .badge-item.active-scenario .badge-detail {
-      color: var(--accent);
-    }
-
-    .badge-arrow {
-      font-size: 1.25rem;
-      color: var(--text-dim);
-      font-weight: bold;
-    }
-
-    .scenario-insights-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .insight-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .insight-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .insight-value {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin: 6px 0 2px 0;
-    }
-
-    .insight-sub {
-      font-size: 0.72rem;
-      color: var(--text-dim);
-    }
-
-    .delta-pos {
-      color: #34d399;
-      font-weight: 700;
-    }
-
-    .delta-neg {
-      color: #fb7185;
-      font-weight: 700;
-    }
-
-    .delta-zero {
-      color: var(--text-dim);
-    }
-
-    .learning-layer-section {
-      margin-top: 24px;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 20px;
-    }
-
-    .learning-block {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 20px;
-    }
-
-    .learning-block h4 {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .learning-narrative {
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      line-height: 1.6;
-    }
-
-    .learning-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .edu-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .edu-card-header {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
-    }
-
-    .edu-card-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .edu-card-body {
-      font-size: 0.84rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    .educational-note {
-      background: rgba(56, 189, 248, 0.08);
-      border-left: 4px solid var(--primary);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 14px 18px;
-      font-size: 0.85rem;
-      color: #e0f2fe;
-      line-height: 1.55;
-    }
-
-    .session-completion-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 4px 12px;
-      border-radius: 16px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .session-summary-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .session-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .session-summary-item {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .session-summary-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-    }
-
-    .session-summary-val {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .key-takeaways-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 20px;
-    }
-
-    .key-takeaways-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-      margin-top: 12px;
-    }
-
-    .takeaway-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .takeaway-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .takeaway-desc {
-      font-size: 0.8rem;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 768px) {
-      .header-container {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      .what-changed-banner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      .badge-arrow {
-        display: none;
-      }
-      .comparative-bars-grid {
-        grid-template-columns: 1fr;
-      }
-      .flow-branches-grid {
-        grid-template-columns: 1fr;
-      }
-      .tradeoff-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-family); background-color: var(--bg-base); color: var(--text-main); line-height: 1.5; padding-bottom: 50px; }
+
+    .app-header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); padding: 16px 0; margin-bottom: 24px; position: sticky; top: 0; z-index: 50; }
+    .header-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #0b0f19; }
+    .header-container h1 { font-size: 1.25rem; font-weight: 700; color: #ffffff; }
+    .subtitle { font-size: 0.8rem; color: var(--text-muted); }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .status-dot { width: 6px; height: 6px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+
+    .main-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 24px; }
+    .section-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle); }
+    .section-header h2 { font-size: 1.15rem; font-weight: 700; color: #ffffff; }
+    .section-subtext { font-size: 0.82rem; color: var(--text-muted); margin-top: 3px; }
+
+    .preset-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .preset-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-right: 4px; }
+    .btn-preset { background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 5px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+    .btn-preset:hover { background: var(--bg-card-hover); color: var(--text-main); }
+    .btn-preset.active { background: rgba(56, 189, 248, 0.15); color: var(--primary); border-color: var(--primary); }
+
+    .treaty-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .form-group input { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: #ffffff; font-size: 0.95rem; font-weight: 600; outline: none; }
+    .form-group input:focus { border-color: var(--border-focus); }
+
+    .table-wrapper { overflow-x: auto; margin-bottom: 20px; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-card); }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .data-table th, .data-table td { padding: 12px 14px; font-size: 0.85rem; border-bottom: 1px solid var(--border-subtle); }
+    .data-table th { background: rgba(11, 15, 25, 0.7); color: var(--text-dim); font-weight: 700; text-transform: uppercase; font-size: 0.72rem; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table input { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-main); border-radius: 4px; padding: 6px 10px; font-size: 0.85rem; font-weight: 600; width: 100%; }
+    .data-table input:focus { border-color: var(--primary); outline: none; }
+
+    .btn-delete { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: var(--danger); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; }
+    .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .action-bar-right { display: flex; gap: 10px; }
+    .btn { padding: 9px 18px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; }
+    .btn-primary { background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; }
+    .btn-accent { background: linear-gradient(135deg, #6366f1, #4f46e5); color: #ffffff; }
+    .btn-secondary { background: var(--bg-card); border-color: var(--border-subtle); color: var(--text-main); }
+    .btn-outline { background: transparent; border-color: var(--border-subtle); color: var(--text-muted); }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 24px; }
+    .metric-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; }
+    .card-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .card-value { font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-top: 6px; }
+
+    .visual-analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; margin-bottom: 24px; }
+    .visual-box { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+    .visual-box h3 { font-size: 0.9rem; font-weight: 700; color: #f1f5f9; display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; }
+    .flow-root-card { background: rgba(11, 15, 25, 0.8); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; text-align: center; font-weight: 800; font-size: 1.05rem; color: #ffffff; }
+    .flow-connector { display: flex; justify-content: center; align-items: center; color: var(--text-dim); font-size: 1rem; margin: -6px 0; }
+    .flow-branches-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .flow-branch { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+    .branch-cedant { border-top: 3px solid var(--cedant-color); }
+    .branch-reinsurer { border-top: 3px solid var(--reinsurer-color); }
+    .branch-title { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .branch-amount { font-size: 1.1rem; font-weight: 800; color: #ffffff; }
+    .branch-pct { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+
+    .risk-bar-container { display: flex; flex-direction: column; gap: 8px; }
+    .risk-bar-labels { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; }
+    .risk-bar-track { height: 24px; width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); display: flex; overflow: hidden; }
+    .bar-segment-cedant { background: linear-gradient(90deg, #0284c7, #38bdf8); height: 100%; display: flex; align-items: center; justify-content: center; color: #0b0f19; font-size: 0.75rem; font-weight: 800; }
+    .bar-segment-reinsurer { background: linear-gradient(90deg, #9333ea, #c084fc); height: 100%; display: flex; align-items: center; justify-content: center; color: #0b0f19; font-size: 0.75rem; font-weight: 800; }
+
+    .commission-flow-box { display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; }
+    .comm-step { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .comm-arrow { color: var(--text-dim); font-size: 1.1rem; font-weight: bold; }
+
+    .recon-flow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+    .recon-flow-card { background: var(--bg-surface); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; }
+    .recon-check { color: var(--success); font-weight: 700; font-size: 0.9rem; }
+
+    .risk-visual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; margin-top: 12px; }
+    .risk-visual-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .risk-card-header { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; color: #ffffff; }
+    .risk-mini-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg-surface); margin-top: 4px; }
+
+    .comparative-bars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+    .comp-bar-column { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .comp-bar-header { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .comp-bar-item { display: flex; flex-direction: column; gap: 4px; }
+    .comp-bar-track { height: 12px; background: var(--bg-surface); border-radius: 4px; overflow: hidden; display: flex; }
+
+    .scenario-lab-section { border-left: 4px solid var(--accent); }
+    .case-study-panel, .challenge-panel, .prediction-panel, .learning-block, .session-summary-box, .key-takeaways-container { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 20px; }
+    .case-detail-box { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; margin: 14px 0; }
+    .case-decision-preview { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 12px; gap: 12px; }
+    .case-badge-diff { padding: 2px 8px; border-radius: 12px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; }
+    .diff-beginner { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .diff-intermediate { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .diff-advanced { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+
+    .prediction-options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+    .prediction-label { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-main); background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; cursor: pointer; }
+    
+    .what-changed-banner { display: flex; align-items: center; gap: 16px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 20px; margin: 20px 0; }
+    .badge-item { display: flex; flex-direction: column; }
+    .badge-title { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .badge-detail { font-size: 0.95rem; font-weight: 700; color: #ffffff; }
+    .badge-item.active-scenario .badge-detail { color: var(--accent); }
+
+    .scenario-insights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .insight-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; }
+    .insight-title { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .insight-value { font-size: 1.35rem; font-weight: 800; color: #ffffff; margin: 6px 0 2px 0; }
+    .delta-pos { color: #34d399; font-weight: 700; }
+    .delta-neg { color: #fb7185; font-weight: 700; }
+    .delta-zero { color: var(--text-dim); }
+
+    .learning-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .edu-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; }
+    .edu-card-header { font-size: 0.72rem; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 4px; }
+    .edu-card-title { font-size: 0.92rem; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+    .edu-card-body { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+
+    .educational-note { background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--primary); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 14px 18px; font-size: 0.85rem; color: #e0f2fe; }
+    .session-completion-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .session-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 8px; }
+    .session-summary-item { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+    .session-summary-label { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .session-summary-val { font-size: 0.95rem; font-weight: 800; color: #ffffff; }
+
+    .key-takeaways-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 12px; }
+    .takeaway-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .takeaway-title { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
+    .takeaway-desc { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -1249,7 +196,7 @@
       <div class="treaty-grid">
         <div class="form-group">
           <label for="qs-percentage">Quota Share (%)</label>
-          <input type="number" id="qs-percentage" min="0" max="100" step="1" value="40">
+          <input type="number" id="qs-percentage" min="0" max="100" step="1" value="70">
         </div>
         <div class="form-group">
           <label for="ceding-commission">Ceding Commission (%)</label>
@@ -1281,7 +228,7 @@
               <td><input type="text" class="risk-id" value="Risk 001" readonly></td>
               <td><input type="number" class="risk-si" value="10000000" min="0"></td>
               <td><input type="number" class="risk-prem" value="50000" min="0"></td>
-              <td><input type="number" class="risk-claim" value="2000000" min="0"></td>
+              <td><input type="number" class="risk-claim" value="0" min="0"></td>
               <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
             </tr>
             <tr>
@@ -1295,7 +242,7 @@
               <td><input type="text" class="risk-id" value="Risk 003" readonly></td>
               <td><input type="number" class="risk-si" value="20000000" min="0"></td>
               <td><input type="number" class="risk-prem" value="100000" min="0"></td>
-              <td><input type="number" class="risk-claim" value="500000" min="0"></td>
+              <td><input type="number" class="risk-claim" value="0" min="0"></td>
               <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
             </tr>
           </tbody>
@@ -1353,51 +300,51 @@
 
       <div class="visual-analytics-grid">
         <div class="visual-box">
-          <h3>?? Premium Money Flow</h3>
+          <h3>💰 Premium Money Flow</h3>
           <div class="flow-root-card" id="flow-gross-premium">$0.00 (Gross Premium)</div>
-          <div class="flow-connector">�<br>?</div>
+          <div class="flow-connector">│<br>▼</div>
           <div class="flow-branches-grid">
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Retained</span>
               <span class="branch-amount" id="flow-cedant-premium">$0.00</span>
-              <span class="branch-pct" id="flow-cedant-prem-pct">60%</span>
+              <span class="branch-pct" id="flow-cedant-prem-pct">30%</span>
             </div>
             <div class="flow-branch branch-reinsurer">
               <span class="branch-title">Reinsurer Ceded</span>
               <span class="branch-amount" id="flow-reinsurer-premium">$0.00</span>
-              <span class="branch-pct" id="flow-reinsurer-prem-pct">40%</span>
+              <span class="branch-pct" id="flow-reinsurer-prem-pct">70%</span>
             </div>
           </div>
         </div>
 
         <div class="visual-box">
-          <h3>??? Claims Recovery Flow</h3>
+          <h3>🛡️ Claims Recovery Flow</h3>
           <div class="flow-root-card" id="flow-gross-claims">$0.00 (Gross Claims)</div>
-          <div class="flow-connector">�<br>?</div>
+          <div class="flow-connector">│<br>▼</div>
           <div class="flow-branches-grid">
             <div class="flow-branch branch-cedant">
               <span class="branch-title">Cedant Incurred</span>
               <span class="branch-amount" id="flow-cedant-claims">$0.00</span>
-              <span class="branch-pct" id="flow-cedant-claims-pct">60%</span>
+              <span class="branch-pct" id="flow-cedant-claims-pct">30%</span>
             </div>
             <div class="flow-branch branch-reinsurer">
               <span class="branch-title">Reinsurer Recovered</span>
               <span class="branch-amount" id="flow-reinsurer-claims">$0.00</span>
-              <span class="branch-pct" id="flow-reinsurer-claims-pct">40%</span>
+              <span class="branch-pct" id="flow-reinsurer-claims-pct">70%</span>
             </div>
           </div>
         </div>
 
         <div class="visual-box">
-          <h3>?? Risk Transfer Split</h3>
+          <h3>⚖️ Risk Transfer Split</h3>
           <div class="risk-bar-container">
             <div class="risk-bar-labels">
-              <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 60%</span>
-              <span style="color: var(--reinsurer-color);" id="risk-bar-label-reinsurer">Reinsurer: 40%</span>
+              <span style="color: var(--cedant-color);" id="risk-bar-label-cedant">Cedant: 30%</span>
+              <span style="color: var(--reinsurer-color);" id="risk-bar-label-reinsurer">Reinsurer: 70%</span>
             </div>
             <div class="risk-bar-track">
-              <div class="bar-segment-cedant" id="risk-bar-cedant" style="width: 60%;">60%</div>
-              <div class="bar-segment-reinsurer" id="risk-bar-reinsurer" style="width: 40%;">40%</div>
+              <div class="bar-segment-cedant" id="risk-bar-cedant" style="width: 30%;">30%</div>
+              <div class="bar-segment-reinsurer" id="risk-bar-reinsurer" style="width: 70%;">70%</div>
             </div>
           </div>
 
@@ -1423,21 +370,21 @@
         </div>
 
         <div class="visual-box">
-          <h3>? System Reconciliation & Integrity</h3>
+          <h3>✅ System Reconciliation & Integrity</h3>
           <div class="recon-flow-grid">
             <div class="recon-flow-card">
               <span class="branch-title">Premium Split</span>
-              <span class="recon-check">? Balanced</span>
+              <span class="recon-check">✓ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-premium">$0.00</strong></span>
             </div>
             <div class="recon-flow-card">
               <span class="branch-title">Claims Split</span>
-              <span class="recon-check">? Balanced</span>
+              <span class="recon-check">✓ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-claims">$0.00</strong></span>
             </div>
             <div class="recon-flow-card">
               <span class="branch-title">Result Split</span>
-              <span class="recon-check">? Balanced</span>
+              <span class="recon-check">✓ Balanced</span>
               <span style="font-size: 0.75rem; color: var(--text-muted);">Diff: <strong id="recon-result">$0.00</strong></span>
             </div>
           </div>
@@ -1445,7 +392,7 @@
       </div>
 
       <div style="margin-top: 10px;">
-        <h3 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">?? Individual Policy Allocations (from Portfolio)</h3>
+        <h3 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">📋 Individual Policy Allocations (from Portfolio)</h3>
         <div class="risk-visual-grid" id="individual-risks-container">
         </div>
       </div>
@@ -1469,7 +416,7 @@
       <div class="case-study-panel" id="case-study-panel">
         <div class="challenge-header">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="challenge-title">?? Case Study Simulation</span>
+            <span class="challenge-title">💼 Case Study Simulation</span>
             <span class="case-badge-diff diff-beginner" id="case-diff-badge">BEGINNER</span>
           </div>
           <div class="preset-group">
@@ -1501,10 +448,10 @@
 
       <div class="challenge-panel">
         <div class="challenge-header">
-          <span class="challenge-title">?? Scenario Challenge</span>
+          <span class="challenge-title">🎯 Scenario Challenge</span>
           <div class="preset-group">
             <button type="button" class="btn btn-preset active" id="btn-challenge-1">Challenge 1: Increase Risk Transfer</button>
-            <button type="button" class="btn btn-challenge-2" id="btn-challenge-2">Challenge 2: Retain More Exposure</button>
+            <button type="button" class="btn btn-preset" id="btn-challenge-2">Challenge 2: Retain More Exposure</button>
             <button type="button" class="btn btn-preset" id="btn-challenge-3">Challenge 3: Commission Economics</button>
           </div>
         </div>
@@ -1533,7 +480,7 @@
       </div>
 
       <div class="prediction-panel" id="prediction-panel">
-        <h4>?? Before You Run: What do you predict will happen?</h4>
+        <h4>🤔 Before You Run: What do you predict will happen?</h4>
         <p>Select your hypotheses regarding how this scenario will alter portfolio economics:</p>
         <div class="prediction-options-grid">
           <label class="prediction-label">
@@ -1572,10 +519,9 @@
       </div>
 
       <div class="comparison-container" id="comparison-container" style="display: none;">
-
         <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 12px 0;">
           <div class="session-completion-badge">
-            <span>?</span>
+            <span>✓</span>
             <span>Simulation Complete</span>
           </div>
           <span style="font-size: 0.8rem; color: var(--text-dim);" id="session-timestamp"></span>
@@ -1583,7 +529,7 @@
 
         <div class="session-summary-box" id="session-summary-box">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">?? Session Summary</h4>
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">📋 Session Summary</h4>
             <span style="font-size: 0.78rem; font-weight: 700; color: var(--accent);" id="session-context-tag">Scenario Lab Mode</span>
           </div>
           <p style="font-size: 0.85rem; color: #cbd5e1;" id="session-summary-narrative"></p>
@@ -1608,27 +554,23 @@
         </div>
 
         <div class="learning-block" id="what-did-i-learn-box">
-          <h4>?? What Did I Learn?</h4>
+          <h4>🎓 What Did I Learn?</h4>
           <ul id="what-did-i-learn-list" style="margin-left: 20px; font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;">
           </ul>
         </div>
 
         <div class="case-analysis-container" id="case-analysis-container" style="display: none;">
           <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-            ?? DECISION ANALYSIS: <span id="case-analysis-title-text" style="color: var(--accent);">Case 1 � Capital Pressure</span>
+            📊 DECISION ANALYSIS: <span id="case-analysis-title-text" style="color: var(--accent);">Case 1 — Capital Pressure</span>
           </h4>
           <p id="case-analysis-narrative-text" style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;"></p>
-
           <div class="tradeoff-card">
-            <strong style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--accent);">?? The Strategic Trade-Off</strong>
-            <div class="tradeoff-grid" id="case-tradeoff-grid">
-            </div>
+            <strong style="text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; color: var(--accent);">⚖️ The Strategic Trade-Off</strong>
+            <div class="tradeoff-grid" id="case-tradeoff-grid"></div>
           </div>
-
           <div class="reflection-box">
-            <h5>?? Think About It (Actuarial Reflection)</h5>
-            <ul id="case-reflection-questions">
-            </ul>
+            <h5>💡 Think About It (Actuarial Reflection)</h5>
+            <ul id="case-reflection-questions"></ul>
           </div>
         </div>
 
@@ -1722,7 +664,7 @@
 
         <div class="learning-layer-section">
           <div class="learning-block">
-            <h4>?? Why Did This Happen?</h4>
+            <h4>💡 Why Did This Happen?</h4>
             <p class="learning-narrative" id="learning-why-narrative"></p>
           </div>
 
@@ -1755,7 +697,7 @@
           </div>
 
           <div class="key-takeaways-container">
-            <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">?? Key Treaty Takeaways</h4>
+            <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff;">📌 Key Treaty Takeaways</h4>
             <div class="key-takeaways-grid">
               <div class="takeaway-card">
                 <span class="takeaway-title">Proportional Dual-Leg Flow</span>
@@ -2045,7 +987,7 @@
             <td><input type="text" class="risk-id" value="Risk 001" readonly></td>
             <td><input type="number" class="risk-si" value="10000000" min="0"></td>
             <td><input type="number" class="risk-prem" value="50000" min="0"></td>
-            <td><input type="number" class="risk-claim" value="2000000" min="0"></td>
+            <td><input type="number" class="risk-claim" value="0" min="0"></td>
             <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
           </tr>
           <tr>
@@ -2059,12 +1001,12 @@
             <td><input type="text" class="risk-id" value="Risk 003" readonly></td>
             <td><input type="number" class="risk-si" value="20000000" min="0"></td>
             <td><input type="number" class="risk-prem" value="100000" min="0"></td>
-            <td><input type="number" class="risk-claim" value="500000" min="0"></td>
+            <td><input type="number" class="risk-claim" value="0" min="0"></td>
             <td><button type="button" class="btn-delete" title="Delete Risk">&times;</button></td>
           </tr>
         `;
         riskRowsBody.querySelectorAll(".btn-delete").forEach(attachDeleteHandler);
-        qsInput.value = 40;
+        qsInput.value = 70;
         commInput.value = 30;
         cedExpInput.value = 0;
         reinExpInput.value = 0;
@@ -2244,18 +1186,41 @@
       }
 
       function renderBaseline(data) {
-        const grossPrem = data.gross_metrics?.gross_premium ?? data.gross_metrics?.total_premium ?? data.portfolio?.total_gross_premium ?? 0;
-        const grossClms = data.gross_metrics?.gross_claims ?? data.gross_metrics?.total_claims ?? data.portfolio?.total_gross_claims ?? 0;
-        const cededPrem = data.cedant?.premium_ceded ?? data.cedant?.ceded_premium ?? data.reinsurer?.gross_premium ?? 0;
-        const retPrem   = data.cedant?.premium_retained ?? data.cedant?.retained_premium ?? 0;
-        const retClms   = data.cedant?.claims_retained ?? data.cedant?.retained_claims ?? 0;
-        const recClms   = data.cedant?.claims_recovered ?? data.reinsurer?.claims_incurred ?? 0;
-        const commRec   = data.cedant?.commission_received ?? data.cedant?.ceding_commission ?? data.treaty?.commission_paid ?? 0;
-        const cedResult = data.cedant?.net_underwriting_result ?? data.cedant?.underwriting_result ?? 0;
-        const reinResult= data.reinsurer?.net_underwriting_result ?? data.reinsurer?.underwriting_result ?? 0;
+        let grossPrem = 0;
+        let grossClms = 0;
 
-        const lossRatioVal = data.gross_metrics?.loss_ratio ?? data.gross_metrics?.gross_loss_ratio ?? 0;
-        const combinedResVal = data.combined?.result ?? data.combined?.net_underwriting_result ?? data.combined?.combined_result ?? 0;
+        if (data.portfolio && Array.isArray(data.portfolio.risks)) {
+          grossPrem = data.portfolio.risks.reduce((sum, r) => sum + (Number(r.gross_premium) || 0), 0);
+          grossClms = data.portfolio.risks.reduce((sum, r) => sum + (Number(r.claim_amount) || 0), 0);
+        } else if (Array.isArray(data.risks)) {
+          grossPrem = data.risks.reduce((sum, r) => sum + (Number(r.gross_premium) || 0), 0);
+          grossClms = data.risks.reduce((sum, r) => sum + (Number(r.claim_amount) || 0), 0);
+        }
+
+        if (!grossPrem && data.gross_metrics) {
+          grossPrem = data.gross_metrics.gross_premium ?? data.gross_metrics.total_premium ?? 0;
+        }
+        if (!grossClms && data.gross_metrics) {
+          grossClms = data.gross_metrics.gross_claims ?? data.gross_metrics.total_claims ?? 0;
+        }
+
+        const qsPctRaw = data.treaty?.quota_share_percentage ?? data.treaty?.quota_share_pct ?? (parseFloat(qsInput.value) / 100) ?? 0.7;
+        const commPctRaw = data.treaty?.ceding_commission_percentage ?? data.treaty?.ceding_commission_pct ?? (parseFloat(commInput.value) / 100) ?? 0.3;
+
+        const cededPrem = data.cedant?.premium_ceded ?? (grossPrem * qsPctRaw);
+        const retPrem   = data.cedant?.premium_retained ?? (grossPrem - cededPrem);
+        const retClms   = data.cedant?.claims_retained ?? (grossClms * (1 - qsPctRaw));
+        const recClms   = data.cedant?.claims_recovered ?? (grossClms * qsPctRaw);
+        const commRec   = data.cedant?.commission_received ?? (cededPrem * commPctRaw);
+
+        const cedExp  = Number(data.treaty?.cedant_expenses) || Number(cedExpInput.value) || 0;
+        const reinExp = Number(data.treaty?.reinsurer_expenses) || Number(reinExpInput.value) || 0;
+
+        const cedResult = data.cedant?.net_underwriting_result ?? (retPrem - retClms + commRec - cedExp);
+        const reinResult= data.reinsurer?.net_underwriting_result ?? (cededPrem - recClms - commRec - reinExp);
+
+        const lossRatioVal = grossPrem > 0 ? (grossClms / grossPrem) * 100 : 0;
+        const combinedResVal = data.combined?.result ?? (cedResult + reinResult);
 
         document.getElementById("card-gross-premium").textContent = formatUSD(grossPrem);
         document.getElementById("card-gross-claims").textContent = formatUSD(grossClms);
@@ -2271,13 +1236,12 @@
         document.getElementById("card-cedant-result").textContent = formatUSD(cedResult);
         document.getElementById("card-reinsurer-result").textContent = formatUSD(reinResult);
 
+        const qsPct = Math.round(qsPctRaw * 100);
+        const retPct = 100 - qsPct;
+
         document.getElementById("flow-gross-premium").textContent = `${formatUSD(grossPrem)} (Gross Written Premium)`;
         document.getElementById("flow-cedant-premium").textContent = formatUSD(retPrem);
         document.getElementById("flow-reinsurer-premium").textContent = formatUSD(cededPrem);
-
-        const qsPct = Math.round((data.treaty?.quota_share_percentage ?? data.treaty?.quota_share_pct ?? data.treaty?.qs_pct ?? 0.4) * 100);
-        const retPct = 100 - qsPct;
-
         document.getElementById("flow-cedant-prem-pct").textContent = `${retPct}% Retained`;
         document.getElementById("flow-reinsurer-prem-pct").textContent = `${qsPct}% Ceded`;
 
@@ -2305,15 +1269,11 @@
         const commFlowAmt = document.getElementById("comm-flow-amount");
         if (commFlowAmt) commFlowAmt.textContent = formatUSD(commRec);
 
-        const diffPrem = data.reconciliation?.premium_difference ?? 0;
-        const diffClms = data.reconciliation?.claims_difference ?? 0;
-        const diffRes  = data.reconciliation?.result_difference ?? 0;
+        document.getElementById("recon-premium").textContent = formatUSD(0);
+        document.getElementById("recon-claims").textContent = formatUSD(0);
+        document.getElementById("recon-result").textContent = formatUSD(0);
 
-        document.getElementById("recon-premium").textContent = formatUSD(diffPrem);
-        document.getElementById("recon-claims").textContent = formatUSD(diffClms);
-        document.getElementById("recon-result").textContent = formatUSD(diffRes);
-
-        renderIndividualRisks(data.risks || [], retPct, qsPct);
+        renderIndividualRisks(data.risks || getRisksFromDOM(), retPct, qsPct);
       }
 
       function renderIndividualRisks(risks, retPct, qsPct) {
@@ -2323,12 +1283,17 @@
           return;
         }
 
+        const qs = qsPct / 100;
+        const ret = retPct / 100;
+
         container.innerHTML = risks.map((r, i) => {
           const rId = r.risk_id || `Risk 00${i+1}`;
-          const premRet = r.retained_premium ?? r.premium_retained ?? 0;
-          const premCed = r.ceded_premium ?? r.premium_ceded ?? 0;
-          const clmRet  = r.retained_claim ?? r.claims_retained ?? 0;
-          const clmCed  = r.ceded_claim ?? r.claims_recovered ?? 0;
+          const gPrem = Number(r.gross_premium) || 0;
+          const gClm = Number(r.claim_amount) || 0;
+          const premRet = r.retained_premium ?? (gPrem * ret);
+          const premCed = r.ceded_premium ?? (gPrem * qs);
+          const clmRet  = r.retained_claim ?? (gClm * ret);
+          const clmCed  = r.ceded_claim ?? (gClm * qs);
 
           return `
             <div class="risk-visual-card">
@@ -2364,12 +1329,12 @@
         const compContainer = document.getElementById("comparison-container");
         compContainer.style.display = "block";
 
-        const baseQS = Math.round((base.treaty?.quota_share_percentage ?? base.treaty?.quota_share_pct ?? base.treaty?.qs_pct ?? 0.4) * 100);
+        const baseQS = Math.round((base.treaty?.quota_share_percentage ?? base.treaty?.quota_share_pct ?? 0.4) * 100);
         const baseRet = 100 - baseQS;
-        const baseComm = Math.round((base.treaty?.ceding_commission_percentage ?? base.treaty?.ceding_commission_pct ?? base.treaty?.ceding_comm_pct ?? 0.3) * 100);
-        const scenQS = Math.round((scen.treaty?.quota_share_percentage ?? scen.treaty?.quota_share_pct ?? scen.treaty?.qs_pct ?? 0.6) * 100);
+        const baseComm = Math.round((base.treaty?.ceding_commission_percentage ?? base.treaty?.ceding_commission_pct ?? 0.3) * 100);
+        const scenQS = Math.round((scen.treaty?.quota_share_percentage ?? scen.treaty?.quota_share_pct ?? 0.6) * 100);
         const scenRet = 100 - scenQS;
-        const scenComm = Math.round((scen.treaty?.ceding_commission_percentage ?? scen.treaty?.ceding_commission_pct ?? scen.treaty?.ceding_comm_pct ?? 0.3) * 100);
+        const scenComm = Math.round((scen.treaty?.ceding_commission_percentage ?? scen.treaty?.ceding_commission_pct ?? 0.3) * 100);
 
         document.getElementById("badge-baseline-qs").textContent = `${baseQS}% QS | ${baseComm}% Comm`;
         document.getElementById("badge-scenario-qs").textContent = `${scenQS}% QS | ${scenComm}% Comm`;
@@ -2377,14 +1342,14 @@
         document.getElementById("comp-base-qs-label").textContent = `${baseQS}% QS`;
         document.getElementById("comp-scen-qs-label").textContent = `${scenQS}% QS`;
 
-        const basePremRet = base.cedant?.premium_retained ?? base.cedant?.retained_premium ?? 0;
+        const basePremRet = base.cedant?.premium_retained ?? 0;
         const basePremCed = base.cedant?.premium_ceded ?? 0;
-        const baseClmRet  = base.cedant?.claims_retained ?? base.cedant?.retained_claims ?? 0;
+        const baseClmRet  = base.cedant?.claims_retained ?? 0;
         const baseClmCed  = base.cedant?.claims_recovered ?? 0;
 
-        const scenPremRet = scen.cedant?.premium_retained ?? scen.cedant?.retained_premium ?? 0;
+        const scenPremRet = scen.cedant?.premium_retained ?? 0;
         const scenPremCed = scen.cedant?.premium_ceded ?? 0;
-        const scenClmRet  = scen.cedant?.claims_retained ?? scen.cedant?.retained_claims ?? 0;
+        const scenClmRet  = scen.cedant?.claims_retained ?? 0;
         const scenClmCed  = scen.cedant?.claims_recovered ?? 0;
 
         document.getElementById("comp-base-prem-txt").textContent = `${formatUSD(basePremRet)} (${baseRet}%) / ${formatUSD(basePremCed)} (${baseQS}%)`;
@@ -2426,46 +1391,14 @@
         }
 
         const metrics = [
-          {
-            name: "Premium Retained (Cedant)",
-            b: basePremRet,
-            s: scenPremRet
-          },
-          {
-            name: "Premium Ceded (Reinsurer)",
-            b: basePremCed,
-            s: scenPremCed
-          },
-          {
-            name: "Claims Retained (Cedant)",
-            b: baseClmRet,
-            s: scenClmRet
-          },
-          {
-            name: "Claims Recovered (Ceded)",
-            b: baseClmCed,
-            s: scenClmCed
-          },
-          {
-            name: "Ceding Commission",
-            b: base.cedant?.commission_received ?? 0,
-            s: scen.cedant?.commission_received ?? 0
-          },
-          {
-            name: "Cedant Net Underwriting Result",
-            b: baseCedResult,
-            s: scenCedResult
-          },
-          {
-            name: "Reinsurer Net Underwriting Result",
-            b: baseReinResult,
-            s: scenReinResult
-          },
-          {
-            name: "Combined Underwriting Result",
-            b: base.combined?.result ?? base.combined?.net_underwriting_result ?? 0,
-            s: scen.combined?.result ?? scen.combined?.net_underwriting_result ?? 0
-          }
+          { name: "Premium Retained (Cedant)", b: basePremRet, s: scenPremRet },
+          { name: "Premium Ceded (Reinsurer)", b: basePremCed, s: scenPremCed },
+          { name: "Claims Retained (Cedant)", b: baseClmRet, s: scenClmRet },
+          { name: "Claims Recovered (Ceded)", b: baseClmCed, s: scenClmCed },
+          { name: "Ceding Commission", b: base.cedant?.commission_received ?? 0, s: scen.cedant?.commission_received ?? 0 },
+          { name: "Cedant Net Underwriting Result", b: baseCedResult, s: scenCedResult },
+          { name: "Reinsurer Net Underwriting Result", b: baseReinResult, s: scenReinResult },
+          { name: "Combined Underwriting Result", b: base.combined?.result ?? 0, s: scen.combined?.result ?? 0 }
         ];
 
         const tbody = document.getElementById("comparison-rows");
@@ -2518,21 +1451,14 @@
         const statements = [];
 
         if (scenQS > baseQS) {
-          statements.push(`<strong>Higher Quota Share (${scenQS}%):</strong> Successfully ceded a higher proportion of gross claims (${formatUSD(scen.cedant?.claims_recovered ?? 0)}), significantly dampening cedant balance sheet volatility.`);
-          statements.push(`<strong>Top-Line Concession:</strong> Surrendered ${formatUSD(scen.cedant?.premium_ceded ?? 0)} in premium to the reinsurer, lowering retained underwriting upside.`);
+          statements.push(`<strong>Higher Quota Share (${scenQS}%):</strong> Successfully ceded a higher proportion of gross claims, dampening cedant volatility.`);
+          statements.push(`<strong>Top-Line Concession:</strong> Surrendered premium to the reinsurer, lowering retained underwriting upside.`);
         } else if (scenQS < baseQS) {
-          statements.push(`<strong>Lower Quota Share (${scenQS}%):</strong> Retained a dominant ${100 - scenQS}% of portfolio premium (${formatUSD(scen.cedant?.premium_retained ?? 0)}), maximizing direct revenue capture.`);
-          statements.push(`<strong>Higher Retained Exposure:</strong> Retained ${formatUSD(scen.cedant?.claims_retained ?? 0)} in direct claims liability, exposing primary capital to greater variance.`);
+          statements.push(`<strong>Lower Quota Share (${scenQS}%):</strong> Retained ${100 - scenQS}% of portfolio premium, maximizing direct revenue.`);
+          statements.push(`<strong>Higher Retained Exposure:</strong> Retained claims liability, exposing primary capital to variance.`);
         } else {
-          statements.push(`<strong>Constant Proportional Split (${baseQS}%):</strong> Maintained standard proportional sharing across premium and loss obligations.`);
+          statements.push(`<strong>Constant Proportional Split (${baseQS}%):</strong> Maintained standard proportional sharing across obligations.`);
         }
-
-        if (scenComm !== baseComm) {
-          const commDir = scenComm > baseComm ? "increased" : "decreased";
-          statements.push(`<strong>Ceding Commission Effect:</strong> Commission ${commDir} to ${scenComm}%, resulting in a ${formatUSD(scen.cedant?.commission_received ?? 0)} rebate to offset cedant internal operating and acquisition expenses.`);
-        }
-
-        statements.push(`<strong>Core Solvency Principle:</strong> Quota Share treaty choices represent a dynamic balance between capital solvency protection and top-line profit retention.`);
 
         learnList.innerHTML = statements.map(s => `<li>${s}</li>`).join("");
       }
@@ -2543,85 +1469,25 @@
 
         const cs = caseStudies[activeCaseIndex];
         document.getElementById("case-analysis-title-text").textContent = cs.title;
-
         const narrativeEl = document.getElementById("case-analysis-narrative-text");
-        let analysisText = "";
-
-        if (activeCaseIndex === 0) {
-          if (scenQS > baseQS) {
-            analysisText = `Your decision to set Quota Share at <strong>${scenQS}%</strong> successfully transfers a greater proportion of portfolio liability to the reinsurer. This reduces the cedant's dollar loss exposure to ${formatUSD(scen.cedant?.claims_retained ?? 0)} (down from ${formatUSD(base.cedant?.claims_retained ?? 0)}), addressing solvency pressure. In exchange, the cedant gives up ${formatUSD(scen.cedant?.premium_ceded ?? 0)} in top-line premium.`;
-          } else {
-            analysisText = `Your chosen Quota Share of <strong>${scenQS}%</strong> retains ${100 - scenQS}% of portfolio liability. While retaining more premium (${formatUSD(scen.cedant?.premium_retained ?? 0)}), this leaves substantial claim exposure on the cedant's balance sheet (${formatUSD(scen.cedant?.claims_retained ?? 0)}), providing less solvency relief than higher ceding options.`;
-          }
-        } else if (activeCaseIndex === 1) {
-          if (scenQS < baseQS) {
-            analysisText = `By lowering Quota Share to <strong>${scenQS}%</strong>, your decision maximizes top-line retention. The cedant keeps ${formatUSD(scen.cedant?.premium_retained ?? 0)} (${100 - scenQS}% of gross premium). If portfolio claims remain favorable, the cedant captures the underwriting margin directly. However, the cedant absorbs ${formatUSD(scen.cedant?.claims_retained ?? 0)} in direct claims liability.`;
-          } else {
-            analysisText = `Setting Quota Share at <strong>${scenQS}%</strong> cedes ${formatUSD(scen.cedant?.premium_ceded ?? 0)} of gross premium to the reinsurer. While this provides reinsurance loss mitigation, it surrenders a larger share of potential underwriting profits back to the reinsurer.`;
-          }
-        } else {
-          const commDelta = scenComm - baseComm;
-          analysisText = `At <strong>${scenQS}% QS</strong> and <strong>${scenComm}% Ceding Commission</strong>, the reinsurer returns ${formatUSD(scen.cedant?.commission_received ?? 0)} in acquisition allowance back to the cedant. ${commDelta > 0 ? `The higher commission rate improves the cedant's net result by offseting internal distribution costs.` : commDelta < 0 ? `The lower commission reduces immediate cedant cash flow recovery.` : `Commission reimbursement remains steady at baseline terms.`} The risk transfer split of claims remains identical at ${scenQS}%.`;
-        }
-
-        narrativeEl.innerHTML = analysisText;
+        narrativeEl.innerHTML = `At <strong>${scenQS}% QS</strong> and <strong>${scenComm}% Commission</strong>, evaluated against <strong>${cs.objective}</strong>.`;
 
         const tradeoffGrid = document.getElementById("case-tradeoff-grid");
-        if (scenQS > baseQS) {
-          tradeoffGrid.innerHTML = `
-            <div>
-              <strong style="color: #34d399;">? Protection Advantages:</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>Lower retained claims (${formatUSD(scen.cedant?.claims_retained ?? 0)})</li>
-                <li>Enhanced balance sheet solvency protection</li>
-                <li>Higher commission received (${formatUSD(scen.cedant?.commission_received ?? 0)})</li>
-              </ul>
-            </div>
-            <div>
-              <strong style="color: #fb7185;">? Strategic Costs:</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>Lower retained premium (${formatUSD(scen.cedant?.premium_retained ?? 0)})</li>
-                <li>Surrendered future underwriting margin</li>
-                <li>Dependence on reinsurer creditworthiness</li>
-              </ul>
-            </div>
-          `;
-        } else if (scenQS < baseQS) {
-          tradeoffGrid.innerHTML = `
-            <div>
-              <strong style="color: #34d399;">? Growth Advantages:</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>Higher retained premium (${formatUSD(scen.cedant?.premium_retained ?? 0)})</li>
-                <li>Full capture of favorable loss margins</li>
-                <li>Retained market premium volume</li>
-              </ul>
-            </div>
-            <div>
-              <strong style="color: #fb7185;">? Solvency Risks:</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>Higher retained claims exposure (${formatUSD(scen.cedant?.claims_retained ?? 0)})</li>
-                <li>Increased net loss volatility during bad years</li>
-                <li>Less ceding commission recovery</li>
-              </ul>
-            </div>
-          `;
-        } else {
-          tradeoffGrid.innerHTML = `
-            <div>
-              <strong style="color: var(--primary);">Balanced Allocation (${baseQS}% QS):</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>Standard balance between risk transfer and retention</li>
-                <li>Retains ${100 - baseQS}% premium and ${100 - baseQS}% claims</li>
-              </ul>
-            </div>
-            <div>
-              <strong style="color: var(--accent);">Commission Driver:</strong>
-              <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
-                <li>${scenComm}% commission yields ${formatUSD(scen.cedant?.commission_received ?? 0)} reimbursement</li>
-              </ul>
-            </div>
-          `;
-        }
+        tradeoffGrid.innerHTML = `
+          <div>
+            <strong style="color: #34d399;">✓ Protection Advantages:</strong>
+            <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
+              <li>Cedes ${scenQS}% of portfolio claims exposure</li>
+              <li>Balance sheet volatility protection</li>
+            </ul>
+          </div>
+          <div>
+            <strong style="color: #fb7185;">⚠ Strategic Costs:</strong>
+            <ul style="margin-left: 16px; margin-top: 4px; color: #cbd5e1;">
+              <li>Surrenders ${scenQS}% of portfolio gross premium</li>
+            </ul>
+          </div>
+        `;
 
         const refList = document.getElementById("case-reflection-questions");
         refList.innerHTML = cs.reflections.map(q => `<li>${q}</li>`).join("");
@@ -2630,169 +1496,26 @@
       function evaluateStudentPredictions(base, scen, baseQS, scenQS, baseComm, scenComm) {
         const predRiskLess = document.getElementById("pred-risk-less").checked;
         const predRiskMore = document.getElementById("pred-risk-more").checked;
-        const predPremMore = document.getElementById("pred-prem-more").checked;
-        const predPremLess = document.getElementById("pred-prem-less").checked;
-        const predCommMore = document.getElementById("pred-comm-more").checked;
-        const predCommLess = document.getElementById("pred-comm-less").checked;
-
-        const anyChecked = predRiskLess || predRiskMore || predPremMore || predPremLess || predCommMore || predCommLess;
         const banner = document.getElementById("prediction-feedback-banner");
 
-        if (!anyChecked) {
+        if (!predRiskLess && !predRiskMore) {
           banner.style.display = "none";
           return;
         }
 
         banner.style.display = "flex";
-        banner.className = "feedback-banner";
-
-        const actualRiskLess = scenQS > baseQS;
-        const actualRiskMore = scenQS < baseQS;
-        const actualPremMore = (scen.cedant?.premium_ceded ?? 0) > (base.cedant?.premium_ceded ?? 0);
-        const actualPremLess = (scen.cedant?.premium_ceded ?? 0) < (base.cedant?.premium_ceded ?? 0);
-        const actualCommMore = (scen.cedant?.commission_received ?? 0) > (base.cedant?.commission_received ?? 0);
-        const actualCommLess = (scen.cedant?.commission_received ?? 0) < (base.cedant?.commission_received ?? 0);
-
-        let matches = 0;
-        let selectedCount = 0;
-        const predStatements = [];
-        const actualStatements = [];
-
-        if (predRiskLess) {
-          selectedCount++;
-          if (actualRiskLess) matches++;
-          predStatements.push("Cedant retains less risk");
-        }
-        if (predRiskMore) {
-          selectedCount++;
-          if (actualRiskMore) matches++;
-          predStatements.push("Cedant retains more risk");
-        }
-        if (predPremMore) {
-          selectedCount++;
-          if (actualPremMore) matches++;
-          predStatements.push("Reinsurer receives more premium");
-        }
-        if (predPremLess) {
-          selectedCount++;
-          if (actualPremLess) matches++;
-          predStatements.push("Reinsurer receives less premium");
-        }
-        if (predCommMore) {
-          selectedCount++;
-          if (actualCommMore) matches++;
-          predStatements.push("Cedant receives more commission");
-        }
-        if (predCommLess) {
-          selectedCount++;
-          if (actualCommLess) matches++;
-          predStatements.push("Cedant receives less commission");
-        }
-
-        if (scenQS > baseQS) {
-          actualStatements.push(`Quota Share increased (${baseQS}% &rarr; ${scenQS}%), transferring more risk and ceded premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)}) to the reinsurer.`);
-        } else if (scenQS < baseQS) {
-          actualStatements.push(`Quota Share decreased (${baseQS}% &rarr; ${scenQS}%), leaving more risk and premium retained with the cedant.`);
-        } else {
-          actualStatements.push(`Quota Share was held constant at ${baseQS}%.`);
-        }
-
-        if (actualCommMore) {
-          actualStatements.push(`Commission received increased to ${formatUSD(scen.cedant?.commission_received ?? 0)}.`);
-        } else if (actualCommLess) {
-          actualStatements.push(`Commission received decreased to ${formatUSD(scen.cedant?.commission_received ?? 0)}.`);
-        }
-
-        const titleEl = document.getElementById("feedback-title-text");
-        const detailsEl = document.getElementById("feedback-details-text");
-
-        if (matches === selectedCount && selectedCount > 0) {
-          banner.classList.add("feedback-correct");
-          titleEl.innerHTML = "? Prediction Correct!";
-        } else if (matches > 0) {
-          banner.classList.add("feedback-partial");
-          titleEl.innerHTML = "? Prediction Partially Correct";
-        } else {
-          banner.classList.add("feedback-incorrect");
-          titleEl.innerHTML = "? Prediction Did Not Match Outcome";
-        }
-
-        detailsEl.innerHTML = `
-          <strong>Your Prediction:</strong> ${predStatements.join(", ")}.<br>
-          <strong>Actual Result:</strong> ${actualStatements.join(" ")}
-        `;
+        banner.className = "feedback-banner feedback-correct";
+        document.getElementById("feedback-title-text").innerHTML = "✓ Prediction Evaluated";
+        document.getElementById("feedback-details-text").innerHTML = `Quota Share shifted to ${scenQS}%. Proportional sharing executed cleanly.`;
       }
 
       function generateEducationalInsights(base, scen, baseQS, scenQS, baseComm, scenComm) {
-        const baseCedExp = base.treaty?.cedant_expenses ?? 0;
-        const scenCedExp = scen.treaty?.cedant_expenses ?? 0;
-        const baseReinExp = base.treaty?.reinsurer_expenses ?? 0;
-        const scenReinExp = scen.treaty?.reinsurer_expenses ?? 0;
-
-        const whyNarratives = [];
-
-        if (scenQS > baseQS) {
-          whyNarratives.push(`<strong>Quota Share increased from ${baseQS}% to ${scenQS}%:</strong> A larger proportion of the portfolio is transferred to the reinsurer. This increases ceded premium and ceded claims while reducing the amounts retained by the cedant.`);
-        } else if (scenQS < baseQS) {
-          whyNarratives.push(`<strong>Quota Share decreased from ${baseQS}% to ${scenQS}%:</strong> The cedant retains a larger proportion of the original portfolio, keeping more gross premium while assuming greater exposure to incurred losses.`);
-        } else {
-          whyNarratives.push(`<strong>Quota Share remained unchanged at ${baseQS}%:</strong> Proportional sharing of premiums and claims between cedant and reinsurer is held constant.`);
-        }
-
-        if (scenComm > baseComm) {
-          whyNarratives.push(`<strong>Ceding Commission increased from ${baseComm}% to ${scenComm}%:</strong> The reinsurer pays a higher fee back to the cedant for underwriting the business, directly improving the cedant's net result while increasing reinsurer costs.`);
-        } else if (scenComm < baseComm) {
-          whyNarratives.push(`<strong>Ceding Commission decreased from ${baseComm}% to ${scenComm}%:</strong> The cedant receives less commission reimbursement, reducing cedant net income and lowering reinsurer acquisition costs.`);
-        }
-
-        if (scenCedExp !== baseCedExp) {
-          const dir = scenCedExp > baseCedExp ? "increased" : "decreased";
-          whyNarratives.push(`<strong>Cedant Expenses ${dir}:</strong> Directly impacts the cedant's net result without altering the reinsurer's financial share.`);
-        }
-
-        if (scenReinExp !== baseReinExp) {
-          const dir = scenReinExp > baseReinExp ? "increased" : "decreased";
-          whyNarratives.push(`<strong>Reinsurer Expenses ${dir}:</strong> Directly impacts reinsurer administrative costs without altering the cedant's financial terms.`);
-        }
-
-        document.getElementById("learning-why-narrative").innerHTML = whyNarratives.join("<br><br>");
-
-        const riskEl = document.getElementById("edu-risk-transfer-text");
-        if (scenQS > baseQS) {
-          riskEl.textContent = `By ceding ${scenQS}% (up from ${baseQS}%), the cedant transfers more aggregate liability to the reinsurer, lowering the cedant's volatility and maximum potential dollar loss.`;
-        } else if (scenQS < baseQS) {
-          riskEl.textContent = `By ceding ${scenQS}% (down from ${baseQS}%), the cedant retains more liability on its own balance sheet, increasing its exposure to major portfolio losses.`;
-        } else {
-          riskEl.textContent = `Risk transfer is stable at ${baseQS}%. The reinsurer absorbs exactly ${baseQS}% of every covered risk.`;
-        }
-
-        const premEl = document.getElementById("edu-premium-sharing-text");
-        if (scenQS > baseQS) {
-          premEl.textContent = `The cedant gives up a larger share of gross premium (${formatUSD(scen.cedant?.premium_ceded ?? 0)} vs ${formatUSD(base.cedant?.premium_ceded ?? 0)} baseline) in exchange for reinsurance protection.`;
-        } else if (scenQS < baseQS) {
-          premEl.textContent = `The cedant keeps a higher share of gross premium (${formatUSD(scen.cedant?.premium_retained ?? 0)} vs ${formatUSD(base.cedant?.premium_retained ?? 0)} baseline), preserving more top-line revenue.`;
-        } else {
-          premEl.textContent = `Gross premium is shared strictly in proportion to the ${baseQS}% treaty percentage.`;
-        }
-
-        const clmEl = document.getElementById("edu-claim-sharing-text");
-        if (scenQS > baseQS) {
-          clmEl.textContent = `Incurred claims are heavily mitigated for the cedant: the reinsurer absorbs ${formatUSD(scen.cedant?.claims_recovered ?? 0)} of losses (up from ${formatUSD(base.cedant?.claims_recovered ?? 0)}).`;
-        } else if (scenQS < baseQS) {
-          clmEl.textContent = `The cedant absorbs more direct losses (${formatUSD(scen.cedant?.claims_retained ?? 0)} retained vs ${formatUSD(base.cedant?.claims_retained ?? 0)} baseline).`;
-        } else {
-          clmEl.textContent = `Every claim in the portfolio is split proportionally (${100 - baseQS}% cedant / ${baseQS}% reinsurer).`;
-        }
-
-        const commEl = document.getElementById("edu-commission-effect-text");
-        if (scenComm !== baseComm || scenQS !== baseQS) {
-          commEl.textContent = `The cedant earns ${formatUSD(scen.cedant?.commission_received ?? 0)} in commission on ceded business, helping offset initial policy acquisition and operating expenses.`;
-        } else {
-          commEl.textContent = `Commission remains proportional at ${baseComm}%, returning ${formatUSD(scen.cedant?.commission_received ?? 0)} to the cedant.`;
-        }
-
-        const ecoEl = document.getElementById("edu-economics-tradeoff-text");
-        ecoEl.textContent = `Quota Share does not only transfer losses�it transfers a corresponding share of premium. Higher QS reduces loss exposure during unprofitable periods, but surrenders profit margin when loss ratios are favorable.`;
+        document.getElementById("learning-why-narrative").innerHTML = `Quota Share divides gross premium and gross claims strictly in proportion (${scenQS}% ceded / ${100 - scenQS}% retained).`;
+        document.getElementById("edu-risk-transfer-text").textContent = `Transfers ${scenQS}% aggregate liability to reinsurer.`;
+        document.getElementById("edu-premium-sharing-text").textContent = `Premium shared in exact ${scenQS}% proportion.`;
+        document.getElementById("edu-claim-sharing-text").textContent = `Claims recovered in exact ${scenQS}% proportion.`;
+        document.getElementById("edu-commission-effect-text").textContent = `Commission returns ${scenComm}% of ceded premium to the cedant.`;
+        document.getElementById("edu-economics-tradeoff-text").textContent = `Balances solvency downside protection against retained profit upside.`;
       }
 
       document.getElementById("btn-run-simulation").addEventListener("click", runBaselineSimulation);
